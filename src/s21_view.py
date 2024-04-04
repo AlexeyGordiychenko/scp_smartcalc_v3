@@ -15,6 +15,8 @@ class View(QMainWindow, Ui_View):
 
         self.calcMode.toggled.connect(self.on_calc_mode_toggled)
         self.graphMode.toggled.connect(self.on_graph_mode_toggled)
+        self.calcMode.toggled.connect(self._view_model.toggle_calc_mode)
+        self.graphMode.toggled.connect(self._view_model.toggle_graph_mode)
         self.calcMode.setChecked(True)
         self.graphMode.setChecked(False)
 

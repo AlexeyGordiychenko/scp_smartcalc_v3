@@ -9,6 +9,8 @@ class ViewModel(QObject):
     def __init__(self, model):
         super().__init__()
         self._model = model
+        self._graph_mode = False
+        self._calc_mode = True
 
     def calculate(self, expression):
         try:
@@ -16,3 +18,9 @@ class ViewModel(QObject):
             self.result_calculate_signal.emit(self._model.calculate())
         except Exception as e:
             self.result_error_signal.emit(str(e))
+
+    def toggle_graph_mode(self, is_on):
+        self._graph_mode = is_on
+
+    def toggle_calc_mode(self, is_on):
+        self._calc_mode = is_on
