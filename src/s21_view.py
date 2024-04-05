@@ -1,5 +1,6 @@
 from PySide6.QtWidgets import QMainWindow
 from PySide6.QtCore import Signal, Slot
+from PySide6.QtGui import QDoubleValidator
 from s21_view_ui import Ui_View
 
 
@@ -59,6 +60,17 @@ class View(QMainWindow, Ui_View):
             self.button_to_result_with_bracket)
         self.pushButton_x.clicked.connect(self.button_to_result)
         self.pushButton_clear.clicked.connect(self.clear_result)
+
+        x_validator = QDoubleValidator(
+            float('-inf'), float('inf'),
+            -1,
+            self
+        )
+        x_validator.setNotation(QDoubleValidator.StandardNotation)
+
+        self.valueX.setValidator(x_validator)
+        self.valueXMax.setValidator(x_validator)
+        self.valueXMin.setValidator(x_validator)
 
     @Slot()
     def button_to_result(self, with_bracket: bool = False):
