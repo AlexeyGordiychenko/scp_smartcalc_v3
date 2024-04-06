@@ -6,7 +6,7 @@ from s21_view_ui import Ui_View
 
 class View(QMainWindow, Ui_View):
 
-    equal_press_signal = Signal(str)
+    equal_press_signal = Signal(str, str, str)
 
     def __init__(self, view_model, parent=None):
         super().__init__(parent)
@@ -96,7 +96,8 @@ class View(QMainWindow, Ui_View):
         self.graphX.setVisible(checked)
 
     def on_equal_press(self):
-        self.equal_press_signal.emit(self.expressionText.text())
+        self.equal_press_signal.emit(self.expressionText.text(
+        ), self.valueX.text(), self.valueX.text())
         self._exp_evaluated = True
 
     def update_result(self, result):

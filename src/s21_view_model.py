@@ -12,12 +12,26 @@ class ViewModel(QObject):
         self._graph_mode = False
         self._calc_mode = True
 
-    def calculate(self, expression):
+    def calculate(self, expression, x_min, x_max):
         try:
             self._model.parse_expression(expression)
-            self.result_calculate_signal.emit(self._model.calculate())
+            self._expression = expression
+            if self._graph_mode:
+                pass
+            elif self._calc_mode:
+                self.calculate_expression(x_min)
         except Exception as e:
             self.result_error_signal.emit(str(e))
+
+    def calculate_expression(self, x):
+        if "x" in self._expression.lower():
+            try:
+                x = float(x)
+            except ValueError:
+                raise ValueError("Invalid 'x' value")
+        else:
+            x = 0
+        self.result_calculate_signal.emit(self._model.calculate(x))
 
     def toggle_graph_mode(self, is_on):
         self._graph_mode = is_on
