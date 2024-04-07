@@ -2,11 +2,13 @@ from PySide6.QtWidgets import QMainWindow
 from PySide6.QtCore import Signal, Slot
 from PySide6.QtGui import QDoubleValidator
 from s21_view_ui import Ui_View
+from s21_view_graph import PlotWindow
 
 
 class View(QMainWindow, Ui_View):
 
-    equal_press_signal = Signal(str, str, str)
+    equal_press_calc_signal = Signal(str, str)
+    equal_press_graph_signal = Signal(str, str, str)
 
     def __init__(self, view_model, parent=None):
         super().__init__(parent)
@@ -16,14 +18,21 @@ class View(QMainWindow, Ui_View):
 
         self.calcMode.toggled.connect(self.on_calc_mode_toggled)
         self.graphMode.toggled.connect(self.on_graph_mode_toggled)
-        self.calcMode.toggled.connect(self._view_model.toggle_calc_mode)
-        self.graphMode.toggled.connect(self._view_model.toggle_graph_mode)
         self.calcMode.setChecked(True)
         self.graphMode.setChecked(False)
 
         self._view_model.result_calculate_signal.connect(self.update_result)
         self._view_model.result_error_signal.connect(self.calculation_error)
-        self.equal_press_signal.connect(self._view_model.calculate)
+        self._view_model.result_plot_graph_start_signal.connect(
+            self.create_graph)
+        self._view_model.result_plot_graph_add_segment_signal.connect(
+            self.add_graph_segment)
+        self._view_model.result_plot_graph_show_signal.connect(
+            self.open_graph)
+        self.equal_press_calc_signal.connect(
+            self._view_model.calculate_expression)
+        self.equal_press_graph_signal.connect(
+            self._view_model.plot_graph)
 
         self.pushButton_equal.clicked.connect(self.on_equal_press)
         self.pushButton_0.clicked.connect(self.button_to_result)
@@ -87,17 +96,19 @@ class View(QMainWindow, Ui_View):
     def button_to_result_with_bracket(self):
         self.button_to_result(True)
 
-    # @Slot(bool)
     def on_calc_mode_toggled(self, checked):
         self.calcX.setVisible(checked)
 
-    # @Slot(bool)
     def on_graph_mode_toggled(self, checked):
         self.graphX.setVisible(checked)
 
     def on_equal_press(self):
-        self.equal_press_signal.emit(self.expressionText.text(
-        ), self.valueX.text(), self.valueX.text())
+        if self.graphMode.isChecked():
+            self.equal_press_graph_signal.emit(
+                self.expressionText.text(), self.valueXMin.text(), self.valueXMax.text())
+        else:
+            self.equal_press_calc_signal.emit(
+                self.expressionText.text(), self.valueX.text())
         self._exp_evaluated = True
 
     def update_result(self, result):
@@ -105,6 +116,15 @@ class View(QMainWindow, Ui_View):
 
     def calculation_error(self, error: str):
         self.expressionText.setText(error)
+
+    def create_graph(self):
+        self._plot_window = PlotWindow()
+
+    def add_graph_segment(self, x, y):
+        self._plot_window.plot_graph(x, y)
+
+    def open_graph(self):
+        self._plot_window.show()
 
     def clear_result(self):
         self.expressionText.setText('')
