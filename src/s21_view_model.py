@@ -8,13 +8,17 @@ class ViewModel(QObject):
     result_error_signal = Signal(str)
     result_plot_graph_signal = Signal(list, list)
 
-    def __init__(self, model):
+    def __init__(self, model, max_graph_range=1000000):
         super().__init__()
         self._model = model
+        self._max_graph_range = max_graph_range
 
-    def calculate(self, x):
+    def calculate(self, x, check_range=False):
         try:
-            return self._model.calculate(x)
+            result = self._model.calculate(x)
+            if check_range and abs(result) > self._max_graph_range:
+                return np.nan
+            return result
         except Exception as e:
             return np.nan
 
@@ -53,7 +57,11 @@ class ViewModel(QObject):
             self.result_error_signal.emit(str(e))
             return
 
+        if x_max > self._max_graph_range:
+            x_max = self._max_graph_range
+        if x_min < -self._max_graph_range:
+            x_min = -self._max_graph_range
         step = 0.01 if abs(x_max-x_min) <= 10 else 0.1
         x = np.arange(x_min, x_max, step)
-        y = [self.calculate(x) for x in x]
+        y = [self.calculate(x, True) for x in x]
         self.result_plot_graph_signal.emit(x, y)
