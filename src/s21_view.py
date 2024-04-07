@@ -2,7 +2,7 @@ from PySide6.QtWidgets import QMainWindow
 from PySide6.QtCore import Signal, Slot
 from PySide6.QtGui import QDoubleValidator
 from s21_view_ui import Ui_View
-from s21_view_graph import PlotWindow
+from s21_view_graph import ViewGraph
 
 
 class View(QMainWindow, Ui_View):
@@ -114,7 +114,7 @@ class View(QMainWindow, Ui_View):
         self.expressionText.setText(error)
 
     def open_graph(self, x, y):
-        self._plot_window = PlotWindow()
+        self._plot_window = ViewGraph()
         self._plot_window.plot_graph(x, y)
         self._plot_window.show()
 
