@@ -47,7 +47,7 @@ class ViewModel(QObject):
         if not x_exp:
             self.result_error_signal.emit("No 'x' in the expression")
             return
-        elif not check_min or not check_max:
+        elif not check_min or not check_max or x_max < x_min:
             self.result_error_signal.emit("Invalid 'x' value")
             return
 
