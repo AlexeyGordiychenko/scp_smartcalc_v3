@@ -23,11 +23,7 @@ class View(QMainWindow, Ui_View):
 
         self._view_model.result_calculate_signal.connect(self.update_result)
         self._view_model.result_error_signal.connect(self.calculation_error)
-        self._view_model.result_plot_graph_start_signal.connect(
-            self.create_graph)
-        self._view_model.result_plot_graph_add_segment_signal.connect(
-            self.add_graph_segment)
-        self._view_model.result_plot_graph_show_signal.connect(
+        self._view_model.result_plot_graph_signal.connect(
             self.open_graph)
         self.equal_press_calc_signal.connect(
             self._view_model.calculate_expression)
@@ -117,13 +113,9 @@ class View(QMainWindow, Ui_View):
     def calculation_error(self, error: str):
         self.expressionText.setText(error)
 
-    def create_graph(self):
+    def open_graph(self, x, y):
         self._plot_window = PlotWindow()
-
-    def add_graph_segment(self, x, y):
         self._plot_window.plot_graph(x, y)
-
-    def open_graph(self):
         self._plot_window.show()
 
     def clear_result(self):
