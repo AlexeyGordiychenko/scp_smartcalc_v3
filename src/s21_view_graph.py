@@ -3,9 +3,10 @@ from PySide6.QtWidgets import QVBoxLayout, QWidget
 
 
 class ViewGraph(QWidget):
-    def __init__(self):
+    def __init__(self, title="Graph"):
         super().__init__()
 
+        self.setWindowTitle(title)
         layout = QVBoxLayout()
         self._plot_widget = pg.PlotWidget()
         layout.addWidget(self._plot_widget)

@@ -114,7 +114,8 @@ class View(QMainWindow, Ui_View):
         self.expressionText.setText(error)
 
     def open_graph(self, x, y):
-        self._plot_window = ViewGraph()
+        self._plot_window = ViewGraph(
+            f"{self.expressionText.text()} ({self.valueXMin.text()} <= x <= {self.valueXMax.text()})")
         self._plot_window.plot_graph(x, y)
         self._plot_window.show()
 
