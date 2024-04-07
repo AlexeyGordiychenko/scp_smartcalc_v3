@@ -15,6 +15,7 @@ class View(QMainWindow, Ui_View):
         self.setupUi(self)
         self._view_model = view_model
         self._exp_evaluated = False
+        self._plot_windows = []
 
         self.calcMode.toggled.connect(self.on_calc_mode_toggled)
         self.graphMode.toggled.connect(self.on_graph_mode_toggled)
@@ -114,10 +115,23 @@ class View(QMainWindow, Ui_View):
         self.expressionText.setText(error)
 
     def open_graph(self, x, y):
-        self._plot_window = ViewGraph(
+        plot_window = ViewGraph(
             f"{self.expressionText.text()} ({self.valueXMin.text()} <= x <= {self.valueXMax.text()})")
-        self._plot_window.plot_graph(x, y)
-        self._plot_window.show()
+        plot_window.plot_graph(x, y)
+        plot_window.show()
+        plot_window.destroyed.connect(
+            lambda: self.remove_plot_window(plot_window))
+        self._plot_windows.append(plot_window)
 
     def clear_result(self):
         self.expressionText.setText('')
+
+    def closeEvent(self, event):
+        for plot_window in self._plot_windows:
+            plot_window.close()
+        self._plot_windows.clear()
+        super().closeEvent(event)
+
+    def remove_plot_window(self, window):
+        if window in self._plot_windows:
+            self._plot_windows.remove(window)
