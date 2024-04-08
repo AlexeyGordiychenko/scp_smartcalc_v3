@@ -7,6 +7,8 @@ class ViewModel(QObject):
     result_calculate_signal = Signal(float)
     result_error_signal = Signal(str)
     result_plot_graph_signal = Signal(list, list)
+    result_calculate_credit_signal = Signal(float, float, float, float)
+    result_error_credit_signal = Signal()
 
     def __init__(self, model, max_graph_range=1000000):
         super().__init__()
@@ -65,3 +67,18 @@ class ViewModel(QObject):
         x = np.arange(x_min, x_max, step)
         y = [self.calculate(x, True) for x in x]
         self.result_plot_graph_signal.emit(x, y)
+
+    def calculate_credit(self, is_annuity, principal, term, interest_rate):
+        check_principal, principal = self.check_x_value(principal)
+        check_term, term = self.check_x_value(term)
+        check_interest_rate, interest_rate = self.check_x_value(interest_rate)
+        if not check_principal or not check_term or not check_interest_rate:
+            self.result_error_credit_signal.emit()
+            return
+        if is_annuity:
+            res = self._model.credit_annuity(principal, term, interest_rate)
+        else:
+            res = self._model.credit_differentiated(
+                principal, term, interest_rate)
+        self.result_calculate_credit_signal.emit(
+            res.monthly_start, res.monthly_end, res.over, res.total)

@@ -9,6 +9,7 @@ class View(QMainWindow, Ui_View):
 
     equal_press_calc_signal = Signal(str, str)
     equal_press_graph_signal = Signal(str, str, str)
+    calculate_credit_signal = Signal(bool, str, str, str)
 
     def __init__(self, view_model, parent=None):
         super().__init__(parent)
@@ -78,6 +79,21 @@ class View(QMainWindow, Ui_View):
         self.valueXMax.setValidator(x_validator)
         self.valueXMin.setValidator(x_validator)
 
+        self.credit_annuity.setChecked(True)
+        self.credit_differentiated.setChecked(False)
+
+        credit_validator = QDoubleValidator(0, float('inf'), 2, self)
+        credit_validator.setNotation(QDoubleValidator.StandardNotation)
+        self.credit_principal.setValidator(credit_validator)
+        self.credit_rate.setValidator(credit_validator)
+        self.credit_term.setValidator(credit_validator)
+
+        self.credit_calc.clicked.connect(self.calculate_credit)
+        self.calculate_credit_signal.connect(self._view_model.calculate_credit)
+        self._view_model.result_calculate_credit_signal.connect(
+            self.update_credit)
+        self._view_model.result_error_credit_signal.connect(self.credit_error)
+
     @Slot()
     def button_to_result(self, with_bracket: bool = False):
         if self._exp_evaluated:
@@ -135,3 +151,23 @@ class View(QMainWindow, Ui_View):
     def remove_plot_window(self, window):
         if window in self._plot_windows:
             self._plot_windows.remove(window)
+
+    def calculate_credit(self):
+        self.calculate_credit_signal.emit(
+            self.credit_annuity.isChecked(),
+            self.credit_principal.text(),
+            self.credit_term.text(),
+            self.credit_rate.text())
+
+    def update_credit(self, monthly_start, monthly_end, over, total):
+        credit_monthly_text = f"{monthly_start:.2f}"
+        if monthly_start != monthly_end:
+            credit_monthly_text += f"...{monthly_end: .2f}"
+        self.credit_monthly.setText(credit_monthly_text)
+        self.credit_over.setText(f"{over:.2f}")
+        self.credit_total.setText(f"{total:.2f}")
+
+    def credit_error(self, err="Invalid input"):
+        self.credit_monthly.setText(err)
+        self.credit_over.setText(err)
+        self.credit_total.setText(err)
