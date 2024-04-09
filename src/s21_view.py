@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QMainWindow
+from PySide6.QtWidgets import QMainWindow, QMessageBox
 from PySide6.QtCore import Signal, Slot
 from PySide6.QtGui import QDoubleValidator
 from s21_view_ui import Ui_View
@@ -94,6 +94,10 @@ class View(QMainWindow, Ui_View):
             self.update_credit)
         self._view_model.result_error_credit_signal.connect(self.credit_error)
 
+        self.historyRestore.clicked.connect(self.restore_expression)
+        self.historyClear.clicked.connect(self.clear_history)
+        self.historyList.itemDoubleClicked.connect(self.restore_expression)
+
     @Slot()
     def button_to_result(self, with_bracket: bool = False):
         if self._exp_evaluated:
@@ -116,6 +120,7 @@ class View(QMainWindow, Ui_View):
         self.graphX.setVisible(checked)
 
     def on_equal_press(self):
+        self.historyList.addItem(self.expressionText.text())
         if self.graphMode.isChecked():
             self.equal_press_graph_signal.emit(
                 self.expressionText.text(), self.valueXMin.text(), self.valueXMax.text())
@@ -171,3 +176,18 @@ class View(QMainWindow, Ui_View):
         self.credit_monthly.setText(err)
         self.credit_over.setText(err)
         self.credit_total.setText(err)
+
+    def restore_expression(self):
+        current_expression = self.historyList.currentItem()
+        if current_expression:
+            self.expressionText.setText(current_expression.text())
+            self.tabWidget.setCurrentIndex(0)
+
+    def clear_history(self):
+        if self.historyList.count() > 0:
+            confirmation = QMessageBox.question(
+                self,
+                "Confirm history clean up", "Are you sure you want to clear the history?",
+                QMessageBox.Yes | QMessageBox.No)
+            if confirmation == QMessageBox.Yes:
+                self.historyList.clear()
