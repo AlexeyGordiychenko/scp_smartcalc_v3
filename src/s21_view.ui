@@ -39,7 +39,7 @@ margin-bottom: 0px;</string>
       <x>10</x>
       <y>0</y>
       <width>581</width>
-      <height>581</height>
+      <height>571</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -63,7 +63,7 @@ margin-top: 10px;
 margin-left:15px;
 font-size: 20px;
 border: none;
-width: 100px;
+width: 96px;
 padding: 10px;
 background-color: #303538;
 border-radius: 6px;
@@ -88,7 +88,7 @@ padding-left: 0px;
      <enum>QTabWidget::North</enum>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>0</number>
     </property>
     <property name="elideMode">
      <enum>Qt::ElideNone</enum>
@@ -1363,7 +1363,7 @@ border-radius: 12px;</string>
          <x>11</x>
          <y>0</y>
          <width>511</width>
-         <height>511</height>
+         <height>501</height>
         </rect>
        </property>
        <property name="styleSheet">
@@ -1669,12 +1669,7 @@ border-radius: 6px;
      <attribute name="title">
       <string>History</string>
      </attribute>
-    </widget>
-    <widget class="QWidget" name="tabHelp">
-     <attribute name="title">
-      <string>Help</string>
-     </attribute>
-     <widget class="QTextEdit" name="textEdit">
+     <widget class="QFrame" name="frameHistory">
       <property name="geometry">
        <rect>
         <x>5</x>
@@ -1683,8 +1678,156 @@ border-radius: 6px;
         <height>521</height>
        </rect>
       </property>
-      <property name="html">
-       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+      <property name="styleSheet">
+       <string notr="true">background-color: #1a1b1c;
+border-radius: 12px;</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QGroupBox" name="groupBoxHistory">
+       <property name="geometry">
+        <rect>
+         <x>11</x>
+         <y>0</y>
+         <width>511</width>
+         <height>501</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background:  #2e3848;
+border-radius: 12px;</string>
+       </property>
+       <property name="title">
+        <string/>
+       </property>
+       <widget class="QListWidget" name="historyList">
+        <property name="geometry">
+         <rect>
+          <x>5</x>
+          <y>60</y>
+          <width>501</width>
+          <height>431</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>18</pointsize>
+         </font>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="historyRestore">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>131</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton {
+background: #7a7f82;
+border-radius: 6px;
+color: #FFFFFF;
+font-size: 20px;
+height:  50px;
+}</string>
+        </property>
+        <property name="text">
+         <string>Restore</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="historyClear">
+        <property name="geometry">
+         <rect>
+          <x>370</x>
+          <y>10</y>
+          <width>131</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton {
+background: #7a7f82;
+border-radius: 6px;
+color: #FFFFFF;
+font-size: 20px;
+height:  50px;
+}</string>
+        </property>
+        <property name="text">
+         <string>Clear</string>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tabHelp">
+     <attribute name="title">
+      <string>Help</string>
+     </attribute>
+     <widget class="QFrame" name="frameHelp">
+      <property name="geometry">
+       <rect>
+        <x>5</x>
+        <y>10</y>
+        <width>531</width>
+        <height>521</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: #1a1b1c;
+border-radius: 12px;</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QGroupBox" name="groupBoxHelp">
+       <property name="geometry">
+        <rect>
+         <x>11</x>
+         <y>0</y>
+         <width>511</width>
+         <height>501</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background:  #2e3848;
+border-radius: 12px;</string>
+       </property>
+       <property name="title">
+        <string/>
+       </property>
+       <widget class="QTextEdit" name="textEditHelp">
+        <property name="geometry">
+         <rect>
+          <x>5</x>
+          <y>10</y>
+          <width>501</width>
+          <height>481</height>
+         </rect>
+        </property>
+        <property name="html">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
@@ -1696,7 +1839,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:x-large; font-weight:700;&quot;&gt;Operations&lt;/span&gt;&lt;/h2&gt;
 &lt;table border=&quot;0&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;&quot; cellspacing=&quot;2&quot; cellpadding=&quot;0&quot;&gt;
 &lt;tr&gt;
-&lt;td style=&quot; padding-left:0; padding-right:25; padding-top:0; padding-bottom:0;&quot;&gt;
+&lt;td style=&quot; padding-left:0; padding-right:45; padding-top:0; padding-bottom:0;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Brackets&lt;/p&gt;&lt;/td&gt;
 &lt;td style=&quot; padding-left:0; padding-right:25; padding-top:0; padding-bottom:0;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;(a + b)&lt;/p&gt;&lt;/td&gt;
@@ -1764,7 +1907,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;td style=&quot; padding-left:0; padding-right:25; padding-top:0; padding-bottom:0;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;+a&lt;/p&gt;&lt;/td&gt;
 &lt;td style=&quot; padding-left:0; padding-right:25; padding-top:0; padding-bottom:0;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Natural logarithm&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Natural log&lt;/p&gt;&lt;/td&gt;
 &lt;td style=&quot; padding-left:0; padding-right:25; padding-top:0; padding-bottom:0;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;ln(x)&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
@@ -1773,14 +1916,16 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;td style=&quot; padding-left:0; padding-right:25; padding-top:0; padding-bottom:0;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;-a&lt;/p&gt;&lt;/td&gt;
 &lt;td style=&quot; padding-left:0; padding-right:25; padding-top:0; padding-bottom:0;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Common logarithm&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Common log&lt;/p&gt;&lt;/td&gt;
 &lt;td style=&quot; padding-left:0; padding-right:25; padding-top:0; padding-bottom:0;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;log(x)&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:x-large; font-weight:700;&quot;&gt;Graph Plotting&lt;/span&gt;&lt;/h2&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;To plot a graph just choose &amp;quot;Graph&amp;quot; at the bottom of the form and set X values &amp;quot;from&amp;quot; and &amp;quot;to&amp;quot;, then press &amp;quot;=&amp;quot; &lt;/p&gt;
 &lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:x-large; font-weight:700;&quot;&gt;Credit Calculation&lt;/span&gt;&lt;/h2&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;To calculate a credit you need to input total credit amount, term, interest rate, select type (annuity, differentiated). Then press the button &amp;quot;Calculate&amp;quot; and the program will output monthly payment, overpayment on credit, total payment. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
+        </property>
+       </widget>
+      </widget>
      </widget>
     </widget>
    </widget>
