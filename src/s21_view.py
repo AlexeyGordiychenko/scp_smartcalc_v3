@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QMainWindow, QMessageBox
-from PySide6.QtCore import Signal, Slot
+from PySide6.QtCore import Signal, Slot, QSettings
 from PySide6.QtGui import QDoubleValidator
 from s21_view_ui import Ui_View
 from s21_view_graph import ViewGraph
@@ -17,6 +17,7 @@ class View(QMainWindow, Ui_View):
         self._view_model = view_model
         self._exp_evaluated = False
         self._plot_windows = []
+        self._settings = QSettings("s21_APP2", "SmartCalc_v3")
 
         self.calcMode.toggled.connect(self.on_calc_mode_toggled)
         self.graphMode.toggled.connect(self.on_graph_mode_toggled)
@@ -98,6 +99,8 @@ class View(QMainWindow, Ui_View):
         self.historyClear.clicked.connect(self.clear_history)
         self.historyList.itemDoubleClicked.connect(self.restore_expression)
 
+        self.restore_settings()
+
     @Slot()
     def button_to_result(self, with_bracket: bool = False):
         if self._exp_evaluated:
@@ -151,6 +154,7 @@ class View(QMainWindow, Ui_View):
         for plot_window in self._plot_windows:
             plot_window.close()
         self._plot_windows.clear()
+        self.save_settings()
         super().closeEvent(event)
 
     def remove_plot_window(self, window):
@@ -191,3 +195,20 @@ class View(QMainWindow, Ui_View):
                 QMessageBox.Yes | QMessageBox.No)
             if confirmation == QMessageBox.Yes:
                 self.historyList.clear()
+
+    def save_settings(self):
+        self._settings.beginWriteArray("history")
+        for i in range(self.historyList.count()):
+            self._settings.setArrayIndex(i)
+            self._settings.setValue(
+                "expression", self.historyList.item(i).text())
+        self._settings.endArray()
+
+    def restore_settings(self):
+        size = self._settings.beginReadArray("history")
+        for i in range(size):
+            self._settings.setArrayIndex(i)
+            value = self._settings.value("expression")
+            if value is not None:
+                self.historyList.addItem(value)
+        self._settings.endArray()
