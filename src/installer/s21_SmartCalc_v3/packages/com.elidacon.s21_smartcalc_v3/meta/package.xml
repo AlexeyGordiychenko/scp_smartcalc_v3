@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    <DisplayName>s21_SmartCalc_v3</DisplayName>
+    <Description>This is going to install s21_SmartCalc_v3 on your computer</Description>
+    <Version>0.3.0-1</Version>
+    <ReleaseDate>2024-04-10</ReleaseDate>
+    <Default>true</Default>
+</Package>
