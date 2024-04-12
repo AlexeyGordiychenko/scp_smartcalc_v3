@@ -6,4 +6,5 @@
     <Publisher>Elidacon</Publisher>
     <StartMenuDir>s21_SmartCalc_v3</StartMenuDir>
     <TargetDir>@HomeDir@/s21_SmartCalc_v3</TargetDir>
+    <RunProgram>@HomeDir@/s21_SmartCalc_v3/s21_SmartCalc_v3</RunProgram>
 </Installer>
