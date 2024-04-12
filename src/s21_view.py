@@ -123,7 +123,7 @@ class View(QMainWindow, Ui_View):
         self.graphX.setVisible(checked)
 
     def on_equal_press(self):
-        self.historyList.addItem(self.expressionText.text())
+        self.historyList.insertItem(0, self.expressionText.text())
         if self.graphMode.isChecked():
             self.equal_press_graph_signal.emit(
                 self.expressionText.text(), self.valueXMin.text(), self.valueXMax.text())
