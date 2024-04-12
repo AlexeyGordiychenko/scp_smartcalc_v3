@@ -25,9 +25,7 @@ Component.prototype.createOperations = function()
                                     "Type=Application\nTerminal=false\nExec=@TargetDir@/"+programName+"\nName="+programName);
             component.addOperation("Copy", "@HomeDir@/.local/share/applications/"+programName+".desktop", "@HomeDir@/Desktop/"+programName+".desktop");
         } else if (systemInfo.kernelType == "winnt") {
-            component.addOperation("CreateShortcut", "@TargetDir@/"+programName, "@StartMenuDir@/"+programName+".lnk",
-                "workingDirectory=@TargetDir@", "iconPath=%SystemRoot%/system32/SHELL32.dll",
-                "iconId=2", "description=Open "+programName);
+            component.addOperation("CreateShortcut", "@TargetDir@/"+programName, "@HomeDir@/Desktop/"+programName+".lnk");
         }
     }
 }
