@@ -1,8 +1,9 @@
 from PySide6.QtWidgets import QMainWindow, QMessageBox
 from PySide6.QtCore import Signal, Slot, QSettings
-from PySide6.QtGui import QDoubleValidator
+from PySide6.QtGui import QDoubleValidator, QColor
 from s21_view_ui import Ui_View
 from s21_view_graph import ViewGraph
+import configparser
 
 
 class View(QMainWindow, Ui_View):
@@ -100,6 +101,38 @@ class View(QMainWindow, Ui_View):
         self.historyList.itemDoubleClicked.connect(self.restore_expression)
 
         self.restore_settings()
+
+        current_style = self.centralwidget.styleSheet()
+        config = configparser.ConfigParser()
+        config.read('config.ini')
+        if 'Color' in config:
+            bg_color = config.get('Color', 'background', fallback=None)
+            if bg_color and QColor(bg_color).isValid():
+                self.setStyleSheet(f"\nbackground-color: {bg_color};")
+        if 'Font size' in config:
+            btn_font_size = self.safe_config_getint(
+                config, 'Font size', 'button')
+            if btn_font_size:
+                current_style += f"\nQPushButton {{font-size: {btn_font_size}pt;}}"
+            tab_font_size = self.safe_config_getint(
+                config, 'Font size', 'tab')
+            if tab_font_size:
+                current_style += f"\nQTabBar {{font-size: {tab_font_size}pt;}}"
+            label_font_size = self.safe_config_getint(config,
+                                                      'Font size', 'label')
+            if label_font_size:
+                current_style += f"\nQLabel {{font-size: {label_font_size}pt;}}"
+            radio_font_size = self.safe_config_getint(config,
+                                                      'Font size', 'radio')
+            if radio_font_size:
+                current_style += f"\nQRadioButton {{font-size: {radio_font_size}pt;}}"
+        self.centralwidget.setStyleSheet(current_style)
+
+        if 'Settings' in config:
+            default_tab = self.safe_config_getint(config,
+                                                  'Settings', 'default_tab', fallback=1)
+            if default_tab and 1 <= default_tab <= 4:
+                self.tabWidget.setCurrentIndex(default_tab - 1)
 
     @Slot()
     def button_to_result(self, with_bracket: bool = False):
@@ -212,3 +245,9 @@ class View(QMainWindow, Ui_View):
             if value is not None:
                 self.historyList.addItem(value)
         self._settings.endArray()
+
+    def safe_config_getint(self, config, section, option, fallback=None):
+        try:
+            return config.getint(section, option, fallback=fallback)
+        except ValueError:
+            return fallback
