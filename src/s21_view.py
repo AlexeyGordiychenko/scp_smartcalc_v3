@@ -1,3 +1,7 @@
+from datetime import datetime
+import logging
+from logging.handlers import TimedRotatingFileHandler
+import os
 from PySide6.QtWidgets import QMainWindow, QMessageBox
 from PySide6.QtCore import Signal, Slot, QSettings
 from PySide6.QtGui import QDoubleValidator, QColor
@@ -134,6 +138,11 @@ class View(QMainWindow, Ui_View):
             if default_tab and 1 <= default_tab <= 4:
                 self.tabWidget.setCurrentIndex(default_tab - 1)
 
+        logging_period = None
+        if 'Logging' in config:
+            logging_period = config.get('Logging', 'period')
+        self.configure_logging(logging_period)
+
     @Slot()
     def button_to_result(self, with_bracket: bool = False):
         if self._exp_evaluated:
@@ -157,6 +166,7 @@ class View(QMainWindow, Ui_View):
 
     def on_equal_press(self):
         self.historyList.insertItem(0, self.expressionText.text())
+        logging.info('Operation performed: %s', self.expressionText.text())
         if self.graphMode.isChecked():
             self.equal_press_graph_signal.emit(
                 self.expressionText.text(), self.valueXMin.text(), self.valueXMax.text())
@@ -251,3 +261,27 @@ class View(QMainWindow, Ui_View):
             return config.getint(section, option, fallback=fallback)
         except ValueError:
             return fallback
+
+    def configure_logging(self, logging_period):
+        log_dir = 'logs'
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+
+        log_format = '%(asctime)s - %(levelname)s - %(message)s'
+        logging.basicConfig(format=log_format, level=logging.INFO, handlers=[])
+
+        interval = 1
+        if logging_period == 'hour':
+            rotation_period = 'H'
+        elif logging_period == 'month':
+            rotation_period = 'D'
+            interval = 30
+        else:
+            rotation_period = 'D'
+
+        log_file_name = os.path.join(log_dir, 'logs_{}.log'.format(
+            datetime.now().strftime('%d-%m-%y-%H-%M-%S')))
+        file_handler = TimedRotatingFileHandler(
+            log_file_name, when=rotation_period, interval=interval)
+        file_handler.setFormatter(logging.Formatter(log_format))
+        logging.getLogger().addHandler(file_handler)
