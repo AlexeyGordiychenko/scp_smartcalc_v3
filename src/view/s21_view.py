@@ -30,9 +30,9 @@ class View(QMainWindow, Ui_View):
         self.calcMode.setChecked(True)
         self.graphMode.setChecked(False)
 
-        self._view_model.result_calculate_signal.connect(self.update_result)
-        self._view_model.result_error_signal.connect(self.calculation_error)
-        self._view_model.result_plot_graph_signal.connect(
+        self._view_model.calc_exp_signal.connect(self.update_result)
+        self._view_model.exp_error_signal.connect(self.calculation_error)
+        self._view_model.plot_graph_signal.connect(
             self.open_graph)
         self.equal_press_calc_signal.connect(
             self._view_model.calculate_expression)
@@ -97,9 +97,9 @@ class View(QMainWindow, Ui_View):
 
         self.credit_calc.clicked.connect(self.calculate_credit)
         self.calculate_credit_signal.connect(self._view_model.calculate_credit)
-        self._view_model.result_calculate_credit_signal.connect(
+        self._view_model.calc_credit_signal.connect(
             self.update_credit)
-        self._view_model.result_error_credit_signal.connect(self.credit_error)
+        self._view_model.credit_error_signal.connect(self.credit_error)
 
         self.historyRestore.clicked.connect(self.restore_expression)
         self.historyClear.clicked.connect(self.clear_history)
