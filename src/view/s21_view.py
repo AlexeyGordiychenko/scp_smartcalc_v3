@@ -1,80 +1,102 @@
-from datetime import datetime
-import logging
-from logging.handlers import TimedRotatingFileHandler
-import os
+import logging.handlers
 from PySide6.QtWidgets import QMainWindow, QMessageBox
 from PySide6.QtCore import Signal, Slot, QSettings
 from PySide6.QtGui import QDoubleValidator, QColor
 from .s21_view_ui import Ui_View
 from .s21_view_graph import ViewGraph
+from datetime import datetime
 import configparser
+import logging
+import os
 
 
 class View(QMainWindow, Ui_View):
 
-    equal_press_calc_signal = Signal(str, str)
-    equal_press_graph_signal = Signal(str, str, str)
-    calculate_credit_signal = Signal(bool, str, str, str)
+    calc_exp_signal = Signal(str, str)
+    plot_graph_signal = Signal(str, str, str)
+    calc_credit_signal = Signal(bool, str, str, str)
 
     def __init__(self, view_model, current_dir, parent=None):
         super().__init__(parent)
         self.setupUi(self)
+
         self._view_model = view_model
         self._exp_evaluated = False
         self._plot_windows = []
         self._settings = QSettings("s21_APP2", "SmartCalc_v3")
         self._current_dir = current_dir
+        self._logging_period = None
 
-        self.calcMode.toggled.connect(self.on_calc_mode_toggled)
-        self.graphMode.toggled.connect(self.on_graph_mode_toggled)
-        self.calcMode.setChecked(True)
-        self.graphMode.setChecked(False)
+        self.set_initial_ui()
+        self.set_view_model_signals()
+        self.set_ui_elements_signals()
+        self.set_validators()
+        self.restore_settings()
+        self.parse_config()
+        self.configure_logging()
 
+    def set_initial_ui(self):
+        self.tgl_calc.setChecked(True)
+        self.tgl_graph.setChecked(False)
+        self.credit_annuity.setChecked(True)
+        self.credit_differentiated.setChecked(False)
+
+    def set_view_model_signals(self):
+        # From the view model
         self._view_model.calc_exp_signal.connect(self.update_result)
         self._view_model.exp_error_signal.connect(self.calculation_error)
-        self._view_model.plot_graph_signal.connect(
-            self.open_graph)
-        self.equal_press_calc_signal.connect(
-            self._view_model.calculate_expression)
-        self.equal_press_graph_signal.connect(
-            self._view_model.plot_graph)
+        self._view_model.plot_graph_signal.connect(self.open_graph)
+        self._view_model.calc_credit_signal.connect(self.update_credit)
+        self._view_model.credit_error_signal.connect(self.credit_error)
+        # To the view model
+        self.calc_exp_signal.connect(self._view_model.calculate_expression)
+        self.plot_graph_signal.connect(self._view_model.plot_graph)
+        self.calc_credit_signal.connect(self._view_model.calculate_credit)
 
-        self.pushButton_equal.clicked.connect(self.on_equal_press)
-        self.pushButton_0.clicked.connect(self.button_to_result)
-        self.pushButton_1.clicked.connect(self.button_to_result)
-        self.pushButton_2.clicked.connect(self.button_to_result)
-        self.pushButton_3.clicked.connect(self.button_to_result)
-        self.pushButton_4.clicked.connect(self.button_to_result)
-        self.pushButton_5.clicked.connect(self.button_to_result)
-        self.pushButton_6.clicked.connect(self.button_to_result)
-        self.pushButton_7.clicked.connect(self.button_to_result)
-        self.pushButton_8.clicked.connect(self.button_to_result)
-        self.pushButton_9.clicked.connect(self.button_to_result)
-        self.pushButton_cos.clicked.connect(self.button_to_result_with_bracket)
-        self.pushButton_sin.clicked.connect(self.button_to_result_with_bracket)
-        self.pushButton_tan.clicked.connect(self.button_to_result_with_bracket)
-        self.pushButton_acos.clicked.connect(
-            self.button_to_result_with_bracket)
-        self.pushButton_asin.clicked.connect(
-            self.button_to_result_with_bracket)
-        self.pushButton_atan.clicked.connect(
-            self.button_to_result_with_bracket)
-        self.pushButton_mod.clicked.connect(self.button_to_result)
-        self.pushButton_log.clicked.connect(self.button_to_result_with_bracket)
-        self.pushButton_ln.clicked.connect(self.button_to_result_with_bracket)
-        self.pushButton_close_bracket.clicked.connect(self.button_to_result)
-        self.pushButton_open_bracket.clicked.connect(self.button_to_result)
-        self.pushButton_div.clicked.connect(self.button_to_result)
-        self.pushButton_mul.clicked.connect(self.button_to_result)
-        self.pushButton_plus.clicked.connect(self.button_to_result)
-        self.pushButton_minus.clicked.connect(self.button_to_result)
-        self.pushButton_point.clicked.connect(self.button_to_result)
-        self.pushButton_pow.clicked.connect(self.button_to_result)
-        self.pushButton_sqrt.clicked.connect(
-            self.button_to_result_with_bracket)
-        self.pushButton_x.clicked.connect(self.button_to_result)
-        self.pushButton_clear.clicked.connect(self.clear_result)
+    def set_ui_elements_signals(self):
+        # Toggle graph/calc
+        self.tgl_calc.toggled.connect(self.on_tgl_calc_toggled)
+        self.tgl_graph.toggled.connect(self.on_tgl_graph_toggled)
+        # Calc buttons
+        self.btn_equal.clicked.connect(self.on_btn_equal_clicked)
+        self.btn_clear.clicked.connect(self.clear_result)
+        self.btn_0.clicked.connect(self.button_to_result)
+        self.btn_1.clicked.connect(self.button_to_result)
+        self.btn_2.clicked.connect(self.button_to_result)
+        self.btn_3.clicked.connect(self.button_to_result)
+        self.btn_4.clicked.connect(self.button_to_result)
+        self.btn_5.clicked.connect(self.button_to_result)
+        self.btn_6.clicked.connect(self.button_to_result)
+        self.btn_7.clicked.connect(self.button_to_result)
+        self.btn_8.clicked.connect(self.button_to_result)
+        self.btn_9.clicked.connect(self.button_to_result)
+        self.btn_close_bracket.clicked.connect(self.button_to_result)
+        self.btn_open_bracket.clicked.connect(self.button_to_result)
+        self.btn_point.clicked.connect(self.button_to_result)
+        self.btn_x.clicked.connect(self.button_to_result)
+        self.btn_div.clicked.connect(self.button_to_result)
+        self.btn_mul.clicked.connect(self.button_to_result)
+        self.btn_plus.clicked.connect(self.button_to_result)
+        self.btn_minus.clicked.connect(self.button_to_result)
+        self.btn_mod.clicked.connect(self.button_to_result)
+        self.btn_pow.clicked.connect(self.button_to_result)
+        self.btn_cos.clicked.connect(self.button_to_result_with_bracket)
+        self.btn_sin.clicked.connect(self.button_to_result_with_bracket)
+        self.btn_tan.clicked.connect(self.button_to_result_with_bracket)
+        self.btn_acos.clicked.connect(self.button_to_result_with_bracket)
+        self.btn_asin.clicked.connect(self.button_to_result_with_bracket)
+        self.btn_atan.clicked.connect(self.button_to_result_with_bracket)
+        self.btn_log.clicked.connect(self.button_to_result_with_bracket)
+        self.btn_ln.clicked.connect(self.button_to_result_with_bracket)
+        self.btn_sqrt.clicked.connect(self.button_to_result_with_bracket)
+        # Credit buttons
+        self.btn_calc_credit.clicked.connect(self.calculate_credit)
+        # History buttons
+        self.btn_hist_restore.clicked.connect(self.restore_exp_from_history)
+        self.btn_hist_clear.clicked.connect(self.clear_history)
+        self.list_hist.itemDoubleClicked.connect(self.restore_exp_from_history)
 
+    def set_validators(self):
         x_validator = QDoubleValidator(
             float('-inf'), float('inf'),
             -1,
@@ -86,27 +108,13 @@ class View(QMainWindow, Ui_View):
         self.valueXMax.setValidator(x_validator)
         self.valueXMin.setValidator(x_validator)
 
-        self.credit_annuity.setChecked(True)
-        self.credit_differentiated.setChecked(False)
-
         credit_validator = QDoubleValidator(0, float('inf'), 2, self)
         credit_validator.setNotation(QDoubleValidator.StandardNotation)
         self.credit_principal.setValidator(credit_validator)
         self.credit_rate.setValidator(credit_validator)
         self.credit_term.setValidator(credit_validator)
 
-        self.credit_calc.clicked.connect(self.calculate_credit)
-        self.calculate_credit_signal.connect(self._view_model.calculate_credit)
-        self._view_model.calc_credit_signal.connect(
-            self.update_credit)
-        self._view_model.credit_error_signal.connect(self.credit_error)
-
-        self.historyRestore.clicked.connect(self.restore_expression)
-        self.historyClear.clicked.connect(self.clear_history)
-        self.historyList.itemDoubleClicked.connect(self.restore_expression)
-
-        self.restore_settings()
-
+    def parse_config(self):
         current_style = self.centralwidget.styleSheet()
         config = configparser.ConfigParser()
         config.read(os.path.join(self._current_dir, 'config.ini'))
@@ -139,10 +147,32 @@ class View(QMainWindow, Ui_View):
             if default_tab and 1 <= default_tab <= 4:
                 self.tabWidget.setCurrentIndex(default_tab - 1)
 
-        logging_period = None
         if 'Logging' in config:
-            logging_period = config.get('Logging', 'period')
-        self.configure_logging(logging_period)
+            self._logging_period = config.get('Logging', 'period')
+
+    def configure_logging(self):
+        log_dir = os.path.join(self._current_dir, 'logs')
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+
+        log_format = '%(asctime)s - %(levelname)s - %(message)s'
+        logging.basicConfig(format=log_format, level=logging.INFO, handlers=[])
+
+        interval = 1
+        if self._logging_period == 'hour':
+            rotation_period = 'H'
+        elif self._logging_period == 'month':
+            rotation_period = 'D'
+            interval = 30
+        else:
+            rotation_period = 'D'
+
+        log_file_name = os.path.join(log_dir, 'logs_{}.log'.format(
+            datetime.now().strftime('%d-%m-%y-%H-%M-%S')))
+        file_handler = logging.handlers.TimedRotatingFileHandler(
+            log_file_name, when=rotation_period, interval=interval)
+        file_handler.setFormatter(logging.Formatter(log_format))
+        logging.getLogger().addHandler(file_handler)
 
     @Slot()
     def button_to_result(self, with_bracket: bool = False):
@@ -159,31 +189,44 @@ class View(QMainWindow, Ui_View):
     def button_to_result_with_bracket(self):
         self.button_to_result(True)
 
-    def on_calc_mode_toggled(self, checked):
+    @Slot(bool)
+    def on_tgl_calc_toggled(self, checked):
         self.calcX.setVisible(checked)
 
-    def on_graph_mode_toggled(self, checked):
+    @Slot(bool)
+    def on_tgl_graph_toggled(self, checked):
         self.graphX.setVisible(checked)
 
-    def on_equal_press(self):
+    @Slot()
+    def on_btn_equal_clicked(self):
         if self._exp_evaluated:
             return
-        self.historyList.insertItem(0, self.expressionText.text())
-        logging.info('Operation performed: %s', self.expressionText.text())
-        if self.graphMode.isChecked():
-            self.equal_press_graph_signal.emit(
-                self.expressionText.text(), self.valueXMin.text(), self.valueXMax.text())
+        current_exp = self.expressionText.text()
+        # Add entry to the history
+        self.list_hist.insertItem(0, current_exp)
+        # Log the operation
+        logging.info('Operation performed: %s', current_exp)
+        # Evaluate the expression
+        if self.tgl_graph.isChecked():
+            self.plot_graph_signal.emit(
+                current_exp, self.valueXMin.text(), self.valueXMax.text())
         else:
-            self.equal_press_calc_signal.emit(
-                self.expressionText.text(), self.valueX.text())
+            self.calc_exp_signal.emit(current_exp, self.valueX.text())
         self._exp_evaluated = True
 
+    @Slot()
     def update_result(self, result):
         self.expressionText.setText(f"{result:.17g}")
 
+    @Slot()
     def calculation_error(self, error: str):
         self.expressionText.setText(error)
 
+    @Slot()
+    def clear_result(self):
+        self.expressionText.setText('')
+
+    @Slot()
     def open_graph(self, x, y):
         plot_window = ViewGraph(
             f"{self.expressionText.text()} ({self.valueXMin.text()} <= x <= {self.valueXMax.text()})")
@@ -193,8 +236,28 @@ class View(QMainWindow, Ui_View):
             lambda: self.remove_plot_window(plot_window))
         self._plot_windows.append(plot_window)
 
-    def clear_result(self):
-        self.expressionText.setText('')
+    @Slot()
+    def calculate_credit(self):
+        self.calc_credit_signal.emit(
+            self.credit_annuity.isChecked(),
+            self.credit_principal.text(),
+            self.credit_term.text(),
+            self.credit_rate.text())
+
+    @Slot()
+    def update_credit(self, monthly_start, monthly_end, over, total):
+        credit_monthly_text = f"{monthly_start:.2f}"
+        if monthly_start != monthly_end:
+            credit_monthly_text += f"...{monthly_end: .2f}"
+        self.credit_monthly.setText(credit_monthly_text)
+        self.credit_over.setText(f"{over:.2f}")
+        self.credit_total.setText(f"{total:.2f}")
+
+    @Slot()
+    def credit_error(self, err="Invalid input"):
+        self.credit_monthly.setText(err)
+        self.credit_over.setText(err)
+        self.credit_total.setText(err)
 
     def closeEvent(self, event):
         for plot_window in self._plot_windows:
@@ -207,47 +270,27 @@ class View(QMainWindow, Ui_View):
         if window in self._plot_windows:
             self._plot_windows.remove(window)
 
-    def calculate_credit(self):
-        self.calculate_credit_signal.emit(
-            self.credit_annuity.isChecked(),
-            self.credit_principal.text(),
-            self.credit_term.text(),
-            self.credit_rate.text())
-
-    def update_credit(self, monthly_start, monthly_end, over, total):
-        credit_monthly_text = f"{monthly_start:.2f}"
-        if monthly_start != monthly_end:
-            credit_monthly_text += f"...{monthly_end: .2f}"
-        self.credit_monthly.setText(credit_monthly_text)
-        self.credit_over.setText(f"{over:.2f}")
-        self.credit_total.setText(f"{total:.2f}")
-
-    def credit_error(self, err="Invalid input"):
-        self.credit_monthly.setText(err)
-        self.credit_over.setText(err)
-        self.credit_total.setText(err)
-
-    def restore_expression(self):
-        current_expression = self.historyList.currentItem()
+    def restore_exp_from_history(self):
+        current_expression = self.list_hist.currentItem()
         if current_expression:
             self.expressionText.setText(current_expression.text())
             self.tabWidget.setCurrentIndex(0)
 
     def clear_history(self):
-        if self.historyList.count() > 0:
+        if self.list_hist.count() > 0:
             confirmation = QMessageBox.question(
                 self,
                 "Confirm history clean up", "Are you sure you want to clear the history?",
                 QMessageBox.Yes | QMessageBox.No)
             if confirmation == QMessageBox.Yes:
-                self.historyList.clear()
+                self.list_hist.clear()
 
     def save_settings(self):
         self._settings.beginWriteArray("history")
-        for i in range(self.historyList.count()):
+        for i in range(self.list_hist.count()):
             self._settings.setArrayIndex(i)
             self._settings.setValue(
-                "expression", self.historyList.item(i).text())
+                "expression", self.list_hist.item(i).text())
         self._settings.endArray()
 
     def restore_settings(self):
@@ -256,7 +299,7 @@ class View(QMainWindow, Ui_View):
             self._settings.setArrayIndex(i)
             value = self._settings.value("expression")
             if value is not None:
-                self.historyList.addItem(value)
+                self.list_hist.addItem(value)
         self._settings.endArray()
 
     def safe_config_getint(self, config, section, option, fallback=None):
@@ -264,27 +307,3 @@ class View(QMainWindow, Ui_View):
             return config.getint(section, option, fallback=fallback)
         except ValueError:
             return fallback
-
-    def configure_logging(self, logging_period):
-        log_dir = os.path.join(self._current_dir, 'logs')
-        if not os.path.exists(log_dir):
-            os.makedirs(log_dir)
-
-        log_format = '%(asctime)s - %(levelname)s - %(message)s'
-        logging.basicConfig(format=log_format, level=logging.INFO, handlers=[])
-
-        interval = 1
-        if logging_period == 'hour':
-            rotation_period = 'H'
-        elif logging_period == 'month':
-            rotation_period = 'D'
-            interval = 30
-        else:
-            rotation_period = 'D'
-
-        log_file_name = os.path.join(log_dir, 'logs_{}.log'.format(
-            datetime.now().strftime('%d-%m-%y-%H-%M-%S')))
-        file_handler = TimedRotatingFileHandler(
-            log_file_name, when=rotation_period, interval=interval)
-        file_handler.setFormatter(logging.Formatter(log_format))
-        logging.getLogger().addHandler(file_handler)

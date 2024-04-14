@@ -177,7 +177,7 @@ margin-top: 10px;</string>
        </property>
        <layout class="QGridLayout" name="calcLayout">
         <item row="0" column="4">
-         <widget class="QPushButton" name="pushButton_x">
+         <widget class="QPushButton" name="btn_x">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -206,7 +206,7 @@ background:  rgb(91, 104, 120);;
          </widget>
         </item>
         <item row="5" column="5">
-         <widget class="QPushButton" name="pushButton_div">
+         <widget class="QPushButton" name="btn_div">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -238,7 +238,7 @@ background:  rgb(91, 104, 120);;
          </widget>
         </item>
         <item row="0" column="2">
-         <widget class="QPushButton" name="pushButton_open_bracket">
+         <widget class="QPushButton" name="btn_open_bracket">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -267,7 +267,7 @@ background:  rgb(91, 104, 120);;
          </widget>
         </item>
         <item row="2" column="1">
-         <widget class="QPushButton" name="pushButton_atan">
+         <widget class="QPushButton" name="btn_atan">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -296,7 +296,7 @@ background:  rgb(91, 104, 120);;
          </widget>
         </item>
         <item row="1" column="5">
-         <widget class="QPushButton" name="pushButton_plus">
+         <widget class="QPushButton" name="btn_plus">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -325,7 +325,7 @@ background:  rgb(91, 104, 120);;
          </widget>
         </item>
         <item row="3" column="5">
-         <widget class="QPushButton" name="pushButton_mul">
+         <widget class="QPushButton" name="btn_mul">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -354,7 +354,7 @@ background:  rgb(91, 104, 120);;
          </widget>
         </item>
         <item row="5" column="0">
-         <widget class="QPushButton" name="pushButton_sqrt">
+         <widget class="QPushButton" name="btn_sqrt">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -383,7 +383,7 @@ background:  rgb(91, 104, 120);;
          </widget>
         </item>
         <item row="2" column="3">
-         <widget class="QPushButton" name="pushButton_5">
+         <widget class="QPushButton" name="btn_5">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -415,7 +415,7 @@ background:  rgb(81, 94, 110);
          </widget>
         </item>
         <item row="1" column="2">
-         <widget class="QPushButton" name="pushButton_7">
+         <widget class="QPushButton" name="btn_7">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -444,7 +444,7 @@ background:  rgb(81, 94, 110);
          </widget>
         </item>
         <item row="2" column="4">
-         <widget class="QPushButton" name="pushButton_6">
+         <widget class="QPushButton" name="btn_6">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -473,7 +473,7 @@ background:  rgb(81, 94, 110);
          </widget>
         </item>
         <item row="5" column="3">
-         <widget class="QPushButton" name="pushButton_point">
+         <widget class="QPushButton" name="btn_point">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -502,7 +502,7 @@ background:  rgb(91, 104, 120);;
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QPushButton" name="pushButton_acos">
+         <widget class="QPushButton" name="btn_acos">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -531,7 +531,7 @@ background:  rgb(91, 104, 120);;
          </widget>
         </item>
         <item row="1" column="4">
-         <widget class="QPushButton" name="pushButton_9">
+         <widget class="QPushButton" name="btn_9">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -560,7 +560,7 @@ background:  rgb(81, 94, 110);
          </widget>
         </item>
         <item row="0" column="3">
-         <widget class="QPushButton" name="pushButton_close_bracket">
+         <widget class="QPushButton" name="btn_close_bracket">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -589,7 +589,7 @@ background:  rgb(91, 104, 120);;
          </widget>
         </item>
         <item row="2" column="2">
-         <widget class="QPushButton" name="pushButton_4">
+         <widget class="QPushButton" name="btn_4">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -618,7 +618,7 @@ background:  rgb(81, 94, 110);
          </widget>
         </item>
         <item row="2" column="0">
-         <widget class="QPushButton" name="pushButton_tan">
+         <widget class="QPushButton" name="btn_tan">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -647,7 +647,7 @@ background:  rgb(91, 104, 120);;
          </widget>
         </item>
         <item row="1" column="3">
-         <widget class="QPushButton" name="pushButton_8">
+         <widget class="QPushButton" name="btn_8">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -676,7 +676,7 @@ background:  rgb(81, 94, 110);
          </widget>
         </item>
         <item row="3" column="4">
-         <widget class="QPushButton" name="pushButton_3">
+         <widget class="QPushButton" name="btn_3">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -705,7 +705,7 @@ background:  rgb(81, 94, 110);
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QPushButton" name="pushButton_sin">
+         <widget class="QPushButton" name="btn_sin">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -734,7 +734,7 @@ background:  rgb(91, 104, 120);;
          </widget>
         </item>
         <item row="3" column="0">
-         <widget class="QPushButton" name="pushButton_ln">
+         <widget class="QPushButton" name="btn_ln">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -763,7 +763,7 @@ background:  rgb(91, 104, 120);;
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QPushButton" name="pushButton_asin">
+         <widget class="QPushButton" name="btn_asin">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -792,7 +792,7 @@ background:  rgb(91, 104, 120);;
          </widget>
         </item>
         <item row="5" column="4">
-         <widget class="QPushButton" name="pushButton_equal">
+         <widget class="QPushButton" name="btn_equal">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -821,7 +821,7 @@ background-color:  rgb(122, 232, 160);
          </widget>
         </item>
         <item row="3" column="1">
-         <widget class="QPushButton" name="pushButton_log">
+         <widget class="QPushButton" name="btn_log">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -850,7 +850,7 @@ background:  rgb(91, 104, 120);;
          </widget>
         </item>
         <item row="2" column="5">
-         <widget class="QPushButton" name="pushButton_minus">
+         <widget class="QPushButton" name="btn_minus">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -879,7 +879,7 @@ background:  rgb(91, 104, 120);;
          </widget>
         </item>
         <item row="3" column="2">
-         <widget class="QPushButton" name="pushButton_1">
+         <widget class="QPushButton" name="btn_1">
           <property name="enabled">
            <bool>true</bool>
           </property>
@@ -914,7 +914,7 @@ background:  rgb(81, 94, 110);
          </widget>
         </item>
         <item row="5" column="2">
-         <widget class="QPushButton" name="pushButton_0">
+         <widget class="QPushButton" name="btn_0">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -944,7 +944,7 @@ background:  rgb(81, 94, 110);
          </widget>
         </item>
         <item row="3" column="3">
-         <widget class="QPushButton" name="pushButton_2">
+         <widget class="QPushButton" name="btn_2">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -973,7 +973,7 @@ background:  rgb(81, 94, 110);
          </widget>
         </item>
         <item row="0" column="0">
-         <widget class="QPushButton" name="pushButton_cos">
+         <widget class="QPushButton" name="btn_cos">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -1002,7 +1002,7 @@ background:  rgb(91, 104, 120);;
          </widget>
         </item>
         <item row="0" column="5">
-         <widget class="QPushButton" name="pushButton_pow">
+         <widget class="QPushButton" name="btn_pow">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -1031,7 +1031,7 @@ background:  rgb(91, 104, 120);;
          </widget>
         </item>
         <item row="5" column="1">
-         <widget class="QPushButton" name="pushButton_mod">
+         <widget class="QPushButton" name="btn_mod">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -1061,7 +1061,7 @@ background:  rgb(91, 104, 120);;
         </item>
        </layout>
       </widget>
-      <widget class="QPushButton" name="pushButton_clear">
+      <widget class="QPushButton" name="btn_clear">
        <property name="geometry">
         <rect>
          <x>440</x>
@@ -1107,7 +1107,7 @@ background:  rgb(91, 104, 120);;
        </property>
        <layout class="QGridLayout" name="modeCalcGraph">
         <item row="0" column="1">
-         <widget class="QRadioButton" name="graphMode">
+         <widget class="QRadioButton" name="tgl_graph">
           <property name="styleSheet">
            <string notr="true">QRadioButton {
 border-radius: 6px;
@@ -1137,7 +1137,7 @@ QRadioButton::indicator:checked {
          </widget>
         </item>
         <item row="0" column="0">
-         <widget class="QRadioButton" name="calcMode">
+         <widget class="QRadioButton" name="tgl_calc">
           <property name="styleSheet">
            <string notr="true">QRadioButton {
 border-radius: 6px;
@@ -1293,7 +1293,7 @@ border-radius: 6px;
       </widget>
       <zorder>expressionText</zorder>
       <zorder>gridLayoutWidget</zorder>
-      <zorder>pushButton_clear</zorder>
+      <zorder>btn_clear</zorder>
       <zorder>gridLayoutWidget_3</zorder>
       <zorder>graphX</zorder>
       <zorder>calcX</zorder>
@@ -1503,7 +1503,7 @@ padding-top: 5px;</string>
          </item>
         </layout>
        </widget>
-       <widget class="QPushButton" name="credit_calc">
+       <widget class="QPushButton" name="btn_calc_credit">
         <property name="geometry">
          <rect>
           <x>270</x>
@@ -1665,7 +1665,7 @@ border-radius: 12px;</string>
        <property name="title">
         <string/>
        </property>
-       <widget class="QListWidget" name="historyList">
+       <widget class="QListWidget" name="list_hist">
         <property name="geometry">
          <rect>
           <x>5</x>
@@ -1680,7 +1680,7 @@ border-radius: 12px;</string>
          </font>
         </property>
        </widget>
-       <widget class="QPushButton" name="historyRestore">
+       <widget class="QPushButton" name="btn_hist_restore">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -1707,7 +1707,7 @@ height:  50px;
          <string>Restore</string>
         </property>
        </widget>
-       <widget class="QPushButton" name="historyClear">
+       <widget class="QPushButton" name="btn_hist_clear">
         <property name="geometry">
          <rect>
           <x>370</x>
@@ -1910,39 +1910,39 @@ li.checked::marker { content: &quot;\2612&quot;; }
  <tabstops>
   <tabstop>tabWidget</tabstop>
   <tabstop>expressionText</tabstop>
-  <tabstop>pushButton_clear</tabstop>
-  <tabstop>pushButton_cos</tabstop>
-  <tabstop>pushButton_acos</tabstop>
-  <tabstop>pushButton_open_bracket</tabstop>
-  <tabstop>pushButton_close_bracket</tabstop>
-  <tabstop>pushButton_x</tabstop>
-  <tabstop>pushButton_pow</tabstop>
-  <tabstop>pushButton_sin</tabstop>
-  <tabstop>pushButton_asin</tabstop>
-  <tabstop>pushButton_7</tabstop>
-  <tabstop>pushButton_8</tabstop>
-  <tabstop>pushButton_9</tabstop>
-  <tabstop>pushButton_plus</tabstop>
-  <tabstop>pushButton_tan</tabstop>
-  <tabstop>pushButton_atan</tabstop>
-  <tabstop>pushButton_4</tabstop>
-  <tabstop>pushButton_5</tabstop>
-  <tabstop>pushButton_6</tabstop>
-  <tabstop>pushButton_minus</tabstop>
-  <tabstop>pushButton_ln</tabstop>
-  <tabstop>pushButton_log</tabstop>
-  <tabstop>pushButton_1</tabstop>
-  <tabstop>pushButton_2</tabstop>
-  <tabstop>pushButton_3</tabstop>
-  <tabstop>pushButton_mul</tabstop>
-  <tabstop>pushButton_sqrt</tabstop>
-  <tabstop>pushButton_mod</tabstop>
-  <tabstop>pushButton_0</tabstop>
-  <tabstop>pushButton_point</tabstop>
-  <tabstop>pushButton_equal</tabstop>
-  <tabstop>pushButton_div</tabstop>
-  <tabstop>calcMode</tabstop>
-  <tabstop>graphMode</tabstop>
+  <tabstop>btn_clear</tabstop>
+  <tabstop>btn_cos</tabstop>
+  <tabstop>btn_acos</tabstop>
+  <tabstop>btn_open_bracket</tabstop>
+  <tabstop>btn_close_bracket</tabstop>
+  <tabstop>btn_x</tabstop>
+  <tabstop>btn_pow</tabstop>
+  <tabstop>btn_sin</tabstop>
+  <tabstop>btn_asin</tabstop>
+  <tabstop>btn_7</tabstop>
+  <tabstop>btn_8</tabstop>
+  <tabstop>btn_9</tabstop>
+  <tabstop>btn_plus</tabstop>
+  <tabstop>btn_tan</tabstop>
+  <tabstop>btn_atan</tabstop>
+  <tabstop>btn_4</tabstop>
+  <tabstop>btn_5</tabstop>
+  <tabstop>btn_6</tabstop>
+  <tabstop>btn_minus</tabstop>
+  <tabstop>btn_ln</tabstop>
+  <tabstop>btn_log</tabstop>
+  <tabstop>btn_1</tabstop>
+  <tabstop>btn_2</tabstop>
+  <tabstop>btn_3</tabstop>
+  <tabstop>btn_mul</tabstop>
+  <tabstop>btn_sqrt</tabstop>
+  <tabstop>btn_mod</tabstop>
+  <tabstop>btn_0</tabstop>
+  <tabstop>btn_point</tabstop>
+  <tabstop>btn_equal</tabstop>
+  <tabstop>btn_div</tabstop>
+  <tabstop>tgl_calc</tabstop>
+  <tabstop>tgl_graph</tabstop>
   <tabstop>valueX</tabstop>
   <tabstop>valueXMin</tabstop>
   <tabstop>valueXMax</tabstop>
@@ -1951,7 +1951,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
   <tabstop>credit_rate</tabstop>
   <tabstop>credit_annuity</tabstop>
   <tabstop>credit_differentiated</tabstop>
-  <tabstop>credit_calc</tabstop>
+  <tabstop>btn_calc_credit</tabstop>
   <tabstop>credit_monthly</tabstop>
   <tabstop>credit_over</tabstop>
   <tabstop>credit_total</tabstop>
