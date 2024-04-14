@@ -3,10 +3,10 @@ all: run_exe
 .PHONY: installer
 
 cpp:
-	python3 s21_setup.py install
+	python3 model/s21_setup.py install
 
 ui:
-	pyside6-uic s21_view.ui -o s21_view_ui.py
+	pyside6-uic view/s21_view.ui -o view/s21_view_ui.py
 
 run: ui
 	python3 s21_main.py

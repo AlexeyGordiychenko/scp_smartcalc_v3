@@ -5,8 +5,8 @@ import os
 from PySide6.QtWidgets import QMainWindow, QMessageBox
 from PySide6.QtCore import Signal, Slot, QSettings
 from PySide6.QtGui import QDoubleValidator, QColor
-from s21_view_ui import Ui_View
-from s21_view_graph import ViewGraph
+from .s21_view_ui import Ui_View
+from .s21_view_graph import ViewGraph
 import configparser
 
 
