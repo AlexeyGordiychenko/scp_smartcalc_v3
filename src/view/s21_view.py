@@ -16,13 +16,14 @@ class View(QMainWindow, Ui_View):
     equal_press_graph_signal = Signal(str, str, str)
     calculate_credit_signal = Signal(bool, str, str, str)
 
-    def __init__(self, view_model, parent=None):
+    def __init__(self, view_model, current_dir, parent=None):
         super().__init__(parent)
         self.setupUi(self)
         self._view_model = view_model
         self._exp_evaluated = False
         self._plot_windows = []
         self._settings = QSettings("s21_APP2", "SmartCalc_v3")
+        self._current_dir = current_dir
 
         self.calcMode.toggled.connect(self.on_calc_mode_toggled)
         self.graphMode.toggled.connect(self.on_graph_mode_toggled)
@@ -108,7 +109,7 @@ class View(QMainWindow, Ui_View):
 
         current_style = self.centralwidget.styleSheet()
         config = configparser.ConfigParser()
-        config.read('config.ini')
+        config.read(os.path.join(self._current_dir, 'config.ini'))
         if 'Color' in config:
             bg_color = config.get('Color', 'background', fallback=None)
             if bg_color and QColor(bg_color).isValid():
@@ -265,7 +266,7 @@ class View(QMainWindow, Ui_View):
             return fallback
 
     def configure_logging(self, logging_period):
-        log_dir = 'logs'
+        log_dir = os.path.join(self._current_dir, 'logs')
         if not os.path.exists(log_dir):
             os.makedirs(log_dir)
 
