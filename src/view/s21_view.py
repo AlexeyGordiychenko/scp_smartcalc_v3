@@ -274,6 +274,7 @@ class View(QMainWindow, Ui_View):
         current_expression = self.list_hist.currentItem()
         if current_expression:
             self.expressionText.setText(current_expression.text())
+            self._exp_evaluated = False
             self.tabWidget.setCurrentIndex(0)
 
     def clear_history(self):
