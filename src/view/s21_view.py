@@ -165,6 +165,8 @@ class View(QMainWindow, Ui_View):
         self.graphX.setVisible(checked)
 
     def on_equal_press(self):
+        if self._exp_evaluated:
+            return
         self.historyList.insertItem(0, self.expressionText.text())
         logging.info('Operation performed: %s', self.expressionText.text())
         if self.graphMode.isChecked():
