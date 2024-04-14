@@ -20,7 +20,7 @@ if __name__ == "__main__":
     model = Model()
     view_model = ViewModel(model)
 
-    window = View(view_model, current_path)
-    window.show()
+    view = View(view_model, current_path)
+    view.show()
 
     app.exec()
