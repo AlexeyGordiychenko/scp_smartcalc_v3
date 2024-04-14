@@ -21,4 +21,4 @@ run_exe: cpp ui exe
 	./installer/s21_SmartCalc_v3/packages/com.elidacon.s21_smartcalc_v3/data/s21_SmartCalc_v3
 
 clean:
-	rm -rf dist *.egg-info build .spec
+	rm -rf dist *.egg-info build *.spec
