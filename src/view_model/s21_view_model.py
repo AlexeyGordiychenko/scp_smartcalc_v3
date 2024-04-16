@@ -15,10 +15,10 @@ class ViewModel(QObject):
         self._model = model
         self._max_graph_range = max_graph_range
 
-    def calculate(self, x, check_range=False):
+    def plot_point_calculate(self, x):
         try:
             result = self._model.calculate(x)
-            if check_range and abs(result) > self._max_graph_range:
+            if abs(result) > self._max_graph_range:
                 return np.nan
             return result
         except Exception as e:
@@ -38,7 +38,7 @@ class ViewModel(QObject):
             return
         try:
             self._model.parse_expression(expression)
-            self.calc_exp_signal.emit(self.calculate(x))
+            self.calc_exp_signal.emit(self._model.calculate(x))
         except Exception as e:
             self.exp_error_signal.emit(str(e))
 
@@ -65,7 +65,7 @@ class ViewModel(QObject):
             x_min = -self._max_graph_range
         step = 0.01 if abs(x_max-x_min) <= 10 else 0.1
         x = np.arange(x_min, x_max, step)
-        y = [self.calculate(x, True) for x in x]
+        y = [self.plot_point_calculate(x) for x in x]
         self.plot_graph_signal.emit(x, y)
 
     def calculate_credit(self, is_annuity, principal, term, interest_rate):
