@@ -1,6 +1,6 @@
 import logging.handlers
 from PySide6.QtWidgets import QMainWindow, QMessageBox
-from PySide6.QtCore import Signal, Slot, QSettings
+from PySide6.QtCore import Signal, Slot, QSettings, QLocale
 from PySide6.QtGui import QDoubleValidator, QColor
 from .s21_view_ui import Ui_View
 from .s21_view_graph import ViewGraph
@@ -97,12 +97,16 @@ class View(QMainWindow, Ui_View):
         self.list_hist.itemDoubleClicked.connect(self.restore_exp_from_history)
 
     def set_validators(self):
+        custom_locale = QLocale.c()
+        custom_locale.setNumberOptions(QLocale.RejectGroupSeparator)
+
         x_validator = QDoubleValidator(
             float('-inf'), float('inf'),
             -1,
             self
         )
         x_validator.setNotation(QDoubleValidator.StandardNotation)
+        x_validator.setLocale(custom_locale)
 
         self.valueX.setValidator(x_validator)
         self.valueXMax.setValidator(x_validator)
@@ -110,6 +114,7 @@ class View(QMainWindow, Ui_View):
 
         credit_validator = QDoubleValidator(0, float('inf'), 2, self)
         credit_validator.setNotation(QDoubleValidator.StandardNotation)
+        credit_validator.setLocale(custom_locale)
         self.credit_principal.setValidator(credit_validator)
         self.credit_rate.setValidator(credit_validator)
         self.credit_term.setValidator(credit_validator)
