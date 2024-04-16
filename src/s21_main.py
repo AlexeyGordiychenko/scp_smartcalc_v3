@@ -16,6 +16,7 @@ if __name__ == "__main__":
         current_path = os.path.dirname(__file__)
 
     app = QApplication([])
+    app.setStyle('Fusion')
 
     model = Model()
     view_model = ViewModel(model)
