@@ -22,6 +22,7 @@ class View(QMainWindow, Ui_View):
 
         self._view_model = view_model
         self._exp_evaluated = False
+        self._mode_switched = False
         self._plot_windows = []
         self._settings = QSettings("s21_APP2", "SmartCalc_v3")
         self._current_dir = current_dir
@@ -57,6 +58,7 @@ class View(QMainWindow, Ui_View):
         # Calc buttons
         self.btn_equal.clicked.connect(self.evaluate_exp)
         self.expressionText.returnPressed.connect(self.evaluate_exp)
+        self.expressionText.textChanged.connect(self.exp_text_changed)
         self.btn_clear.clicked.connect(self.clear_result)
         self.btn_0.clicked.connect(self.button_to_exp)
         self.btn_1.clicked.connect(self.button_to_exp)
@@ -175,26 +177,30 @@ class View(QMainWindow, Ui_View):
     def button_to_exp(self, with_bracket: bool = False):
         if self._exp_evaluated:
             self.clear_result()
-            self._exp_evaluated = False
+            self.exp_text_changed()
 
         button = self.sender()
         new_label = self.expressionText.text() + button.text() + \
             ("(" if with_bracket else "")
-        self.expressionText.setText(new_label)
+        self.exp_set_text_no_signals(new_label)
 
     def button_to_exp_with_bracket(self):
         self.button_to_exp(True)
 
+    def exp_text_changed(self):
+        self._exp_evaluated = False
+
     @Slot(bool)
     def on_tgl_calc_toggled(self, checked):
         self.calcX.setVisible(checked)
+        self._mode_switched = True
 
     @Slot(bool)
     def on_tgl_graph_toggled(self, checked):
         self.graphX.setVisible(checked)
 
     def evaluate_exp(self):
-        if self._exp_evaluated:
+        if self._exp_evaluated and self.tgl_calc.isChecked() and not self._mode_switched:
             return
         current_exp = self.expressionText.text()
         # Add entry to the history
@@ -208,15 +214,16 @@ class View(QMainWindow, Ui_View):
         else:
             self.calc_exp_signal.emit(current_exp, self.valueX.text())
         self._exp_evaluated = True
+        self._mode_switched = False
 
     def update_result(self, result):
-        self.expressionText.setText(f"{result:.17g}")
+        self.exp_set_text_no_signals(f"{result:.17g}")
 
     def calculation_error(self, error: str):
-        self.expressionText.setText(error)
+        self.exp_set_text_no_signals(error)
 
     def clear_result(self):
-        self.expressionText.setText('')
+        self.exp_set_text_no_signals('')
 
     def open_graph(self, x, y):
         plot_window = ViewGraph(
@@ -262,7 +269,6 @@ class View(QMainWindow, Ui_View):
         current_expression = self.list_hist.currentItem()
         if current_expression:
             self.expressionText.setText(current_expression.text())
-            self._exp_evaluated = False
             self.tabWidget.setCurrentIndex(0)
 
     def clear_history(self):
@@ -296,3 +302,8 @@ class View(QMainWindow, Ui_View):
             return config.getint(section, option, fallback=fallback)
         except ValueError:
             return fallback
+
+    def exp_set_text_no_signals(self, text):
+        self.expressionText.blockSignals(True)
+        self.expressionText.setText(text)
+        self.expressionText.blockSignals(False)
