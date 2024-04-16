@@ -54,41 +54,39 @@ class View(QMainWindow, Ui_View):
         self.calc_credit_signal.connect(self._view_model.calculate_credit)
 
     def set_ui_elements_signals(self):
-        # Toggle graph/calc
-        self.tgl_calc.toggled.connect(self.on_tgl_calc_toggled)
-        self.tgl_graph.toggled.connect(self.on_tgl_graph_toggled)
         # Calc buttons
-        self.btn_equal.clicked.connect(self.on_btn_equal_clicked)
+        self.btn_equal.clicked.connect(self.evaluate_exp)
+        self.expressionText.returnPressed.connect(self.evaluate_exp)
         self.btn_clear.clicked.connect(self.clear_result)
-        self.btn_0.clicked.connect(self.button_to_result)
-        self.btn_1.clicked.connect(self.button_to_result)
-        self.btn_2.clicked.connect(self.button_to_result)
-        self.btn_3.clicked.connect(self.button_to_result)
-        self.btn_4.clicked.connect(self.button_to_result)
-        self.btn_5.clicked.connect(self.button_to_result)
-        self.btn_6.clicked.connect(self.button_to_result)
-        self.btn_7.clicked.connect(self.button_to_result)
-        self.btn_8.clicked.connect(self.button_to_result)
-        self.btn_9.clicked.connect(self.button_to_result)
-        self.btn_close_bracket.clicked.connect(self.button_to_result)
-        self.btn_open_bracket.clicked.connect(self.button_to_result)
-        self.btn_point.clicked.connect(self.button_to_result)
-        self.btn_x.clicked.connect(self.button_to_result)
-        self.btn_div.clicked.connect(self.button_to_result)
-        self.btn_mul.clicked.connect(self.button_to_result)
-        self.btn_plus.clicked.connect(self.button_to_result)
-        self.btn_minus.clicked.connect(self.button_to_result)
-        self.btn_mod.clicked.connect(self.button_to_result)
-        self.btn_pow.clicked.connect(self.button_to_result)
-        self.btn_cos.clicked.connect(self.button_to_result_with_bracket)
-        self.btn_sin.clicked.connect(self.button_to_result_with_bracket)
-        self.btn_tan.clicked.connect(self.button_to_result_with_bracket)
-        self.btn_acos.clicked.connect(self.button_to_result_with_bracket)
-        self.btn_asin.clicked.connect(self.button_to_result_with_bracket)
-        self.btn_atan.clicked.connect(self.button_to_result_with_bracket)
-        self.btn_log.clicked.connect(self.button_to_result_with_bracket)
-        self.btn_ln.clicked.connect(self.button_to_result_with_bracket)
-        self.btn_sqrt.clicked.connect(self.button_to_result_with_bracket)
+        self.btn_0.clicked.connect(self.button_to_exp)
+        self.btn_1.clicked.connect(self.button_to_exp)
+        self.btn_2.clicked.connect(self.button_to_exp)
+        self.btn_3.clicked.connect(self.button_to_exp)
+        self.btn_4.clicked.connect(self.button_to_exp)
+        self.btn_5.clicked.connect(self.button_to_exp)
+        self.btn_6.clicked.connect(self.button_to_exp)
+        self.btn_7.clicked.connect(self.button_to_exp)
+        self.btn_8.clicked.connect(self.button_to_exp)
+        self.btn_9.clicked.connect(self.button_to_exp)
+        self.btn_close_bracket.clicked.connect(self.button_to_exp)
+        self.btn_open_bracket.clicked.connect(self.button_to_exp)
+        self.btn_point.clicked.connect(self.button_to_exp)
+        self.btn_x.clicked.connect(self.button_to_exp)
+        self.btn_div.clicked.connect(self.button_to_exp)
+        self.btn_mul.clicked.connect(self.button_to_exp)
+        self.btn_plus.clicked.connect(self.button_to_exp)
+        self.btn_minus.clicked.connect(self.button_to_exp)
+        self.btn_mod.clicked.connect(self.button_to_exp)
+        self.btn_pow.clicked.connect(self.button_to_exp)
+        self.btn_cos.clicked.connect(self.button_to_exp_with_bracket)
+        self.btn_sin.clicked.connect(self.button_to_exp_with_bracket)
+        self.btn_tan.clicked.connect(self.button_to_exp_with_bracket)
+        self.btn_acos.clicked.connect(self.button_to_exp_with_bracket)
+        self.btn_asin.clicked.connect(self.button_to_exp_with_bracket)
+        self.btn_atan.clicked.connect(self.button_to_exp_with_bracket)
+        self.btn_log.clicked.connect(self.button_to_exp_with_bracket)
+        self.btn_ln.clicked.connect(self.button_to_exp_with_bracket)
+        self.btn_sqrt.clicked.connect(self.button_to_exp_with_bracket)
         # Credit buttons
         self.btn_calc_credit.clicked.connect(self.calculate_credit)
         # History buttons
@@ -174,8 +172,7 @@ class View(QMainWindow, Ui_View):
         file_handler.setFormatter(logging.Formatter(log_format))
         logging.getLogger().addHandler(file_handler)
 
-    @Slot()
-    def button_to_result(self, with_bracket: bool = False):
+    def button_to_exp(self, with_bracket: bool = False):
         if self._exp_evaluated:
             self.clear_result()
             self._exp_evaluated = False
@@ -185,9 +182,8 @@ class View(QMainWindow, Ui_View):
             ("(" if with_bracket else "")
         self.expressionText.setText(new_label)
 
-    @Slot()
-    def button_to_result_with_bracket(self):
-        self.button_to_result(True)
+    def button_to_exp_with_bracket(self):
+        self.button_to_exp(True)
 
     @Slot(bool)
     def on_tgl_calc_toggled(self, checked):
@@ -197,8 +193,7 @@ class View(QMainWindow, Ui_View):
     def on_tgl_graph_toggled(self, checked):
         self.graphX.setVisible(checked)
 
-    @Slot()
-    def on_btn_equal_clicked(self):
+    def evaluate_exp(self):
         if self._exp_evaluated:
             return
         current_exp = self.expressionText.text()
@@ -214,19 +209,15 @@ class View(QMainWindow, Ui_View):
             self.calc_exp_signal.emit(current_exp, self.valueX.text())
         self._exp_evaluated = True
 
-    @Slot()
     def update_result(self, result):
         self.expressionText.setText(f"{result:.17g}")
 
-    @Slot()
     def calculation_error(self, error: str):
         self.expressionText.setText(error)
 
-    @Slot()
     def clear_result(self):
         self.expressionText.setText('')
 
-    @Slot()
     def open_graph(self, x, y):
         plot_window = ViewGraph(
             f"{self.expressionText.text()} ({self.valueXMin.text()} <= x <= {self.valueXMax.text()})")
@@ -236,7 +227,6 @@ class View(QMainWindow, Ui_View):
             lambda: self.remove_plot_window(plot_window))
         self._plot_windows.append(plot_window)
 
-    @Slot()
     def calculate_credit(self):
         self.calc_credit_signal.emit(
             self.credit_annuity.isChecked(),
@@ -244,7 +234,6 @@ class View(QMainWindow, Ui_View):
             self.credit_term.text(),
             self.credit_rate.text())
 
-    @Slot()
     def update_credit(self, monthly_start, monthly_end, over, total):
         credit_monthly_text = f"{monthly_start:.2f}"
         if monthly_start != monthly_end:
@@ -253,7 +242,6 @@ class View(QMainWindow, Ui_View):
         self.credit_over.setText(f"{over:.2f}")
         self.credit_total.setText(f"{total:.2f}")
 
-    @Slot()
     def credit_error(self, err="Invalid input"):
         self.credit_monthly.setText(err)
         self.credit_over.setText(err)
