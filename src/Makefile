@@ -60,11 +60,5 @@ gcov_report: test
 	gcovr --html-details -o $(GCOV_DIR)/index.html --exclude $(MODEL_DIR)/s21_\.\*wrapper\.\*
 	open $(GCOV_DIR)/index.html
 
-lcov_report: test
-	mkdir -p $(GCOV_DIR)
-	lcov --capture --directory $(SRC_DIR) --exclude "$(CURDIR)/tests/*" --exclude "$(CURDIR)/model/*wrapper*" --output-file $(GCOV_DIR)/coverage.info --no-external
-	genhtml -o $(GCOV_DIR) $(GCOV_DIR)/coverage.info 
-	open $(GCOV_DIR)/index.html
-
 clean:
 	rm -rf dist build *.egg-info *.spec $(UI_PY) $(EXE_PATH)/$(EXE_NAME) $(INSTALLER_DIR)/$(INSTALLER_NAME) $(GCOV_DIR)
