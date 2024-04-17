@@ -13,12 +13,20 @@ CPP_LIB = $(subst _gcov,,$(CPP_LIB_GCOV))
 SRC_DIR=.
 GCOV_DIR=gcov
 
+VENV=../.venv
+VENV_BIN=$(VENV)/bin
+PYTHON=$(VENV_BIN)/python3
+PYINSTALLER=$(VENV_BIN)/pyinstaller
+PYSIDE6=$(VENV_BIN)/pyside6-uic
+PYTEST=$(VENV_BIN)/pytest
+GCOVR=$(VENV_BIN)/gcovr
+LCOV=$(VENV_BIN)/lcov
 
 all: run_exe
 
 venv:
-	python -m venv ../.venv && source ../.venv/bin/activate
-	pip install -r requirements.txt
+	python3.11 -m venv $(VENV)
+	$(PYTHON) -m pip install -r requirements.txt --no-warn-script-location
 
 cpp: $(CPP_LIB)
 
@@ -27,7 +35,7 @@ cpp_gcov: $(CPP_LIB_GCOV)
 ui: $(UI_PY)
 
 run: cpp ui
-	python s21_main.py
+	$(PYTHON) s21_main.py
 
 exe: $(EXE_PATH)/$(EXE_NAME)
 
@@ -38,26 +46,26 @@ run_installer: $(INSTALLER_DIR)/$(INSTALLER_NAME)
 	$(INSTALLER_DIR)/$(INSTALLER_NAME)
 
 $(CPP_LIB): $(SRCS_MODEL)
-	export S21_SMARTCALC3_GCOV=0 && python $(MODEL_DIR)/s21_setup.py install
+	export S21_SMARTCALC3_GCOV=0 && $(PYTHON) $(MODEL_DIR)/s21_setup.py install
 
 $(CPP_LIB_GCOV): $(SRCS_MODEL)
-	export S21_SMARTCALC3_GCOV=1 && python $(MODEL_DIR)/s21_setup.py install
+	export S21_SMARTCALC3_GCOV=1 && $(PYTHON) $(MODEL_DIR)/s21_setup.py install
 
 $(UI_PY): view/s21_view.ui
-	pyside6-uic view/s21_view.ui -o $(UI_PY)
+	$(PYSIDE6) view/s21_view.ui -o $(UI_PY)
 
 $(EXE_PATH)/$(EXE_NAME): cpp ui
-	pyinstaller --onefile -w --distpath $(EXE_PATH) --name $(EXE_NAME) s21_main.py 
+	$(PYINSTALLER) --onefile -w --distpath $(EXE_PATH) --name $(EXE_NAME) s21_main.py 
 
 $(INSTALLER_DIR)/$(INSTALLER_NAME): $(EXE_PATH)/$(EXE_NAME)
 	$(QtIFW_FOLDER)/bin/binarycreator -c $(INSTALLER_DIR)/$(EXE_NAME)/config/config.xml -p $(INSTALLER_DIR)/$(EXE_NAME)/packages/ $(INSTALLER_DIR)/$(INSTALLER_NAME)
 
 test: cpp_gcov
-	pytest
+	$(PYTEST)
 
 gcov_report: test
 	mkdir -p $(GCOV_DIR)
-	gcovr --html-details -o $(GCOV_DIR)/index.html --exclude $(MODEL_DIR)/s21_\.\*wrapper\.\*
+	$(GCOVR) --html-details -o $(GCOV_DIR)/index.html --exclude $(MODEL_DIR)/s21_\.\*wrapper\.\*
 	open $(GCOV_DIR)/index.html
 
 clean:
