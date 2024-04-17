@@ -1,4 +1,4 @@
-from s21_model_wrapper import Model
+from s21_model_wrapper_gcov import Model
 import pytest
 
 

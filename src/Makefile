@@ -7,7 +7,12 @@ EXE_PATH = $(INSTALLER_DIR)/$(EXE_NAME)/packages/com.elidacon.s21_smartcalc_v3/d
 
 MODEL_DIR=model
 SRCS_MODEL=$(wildcard $(MODEL_DIR)/s21_*.cc $(MODEL_DIR)/s21_*.h)
-CPP_LIB = dist/s21_model_wrapper-0.1-py3.11-linux-x86_64.egg
+CPP_LIB_GCOV = dist/s21_model_wrapper_gcov-0.1-py3.11-linux-x86_64.egg
+CPP_LIB = $(subst _gcov,,$(CPP_LIB_GCOV))
+
+SRC_DIR=.
+GCOV_DIR=gcov
+
 
 all: run_exe
 
@@ -16,6 +21,8 @@ venv:
 	pip install -r requirements.txt
 
 cpp: $(CPP_LIB)
+
+cpp_gcov: $(CPP_LIB_GCOV)
 
 ui: $(UI_PY)
 
@@ -30,7 +37,10 @@ run_exe: exe
 installer: $(INSTALLER_DIR)/$(INSTALLER_NAME)
 
 $(CPP_LIB): $(SRCS_MODEL)
-	python $(MODEL_DIR)/s21_setup.py install
+	export S21_SMARTCALC3_GCOV=0 && python $(MODEL_DIR)/s21_setup.py install
+
+$(CPP_LIB_GCOV): $(SRCS_MODEL)
+	export S21_SMARTCALC3_GCOV=1 && python $(MODEL_DIR)/s21_setup.py install
 
 $(UI_PY): view/s21_view.ui
 	pyside6-uic view/s21_view.ui -o $(UI_PY)
@@ -41,8 +51,19 @@ $(EXE_PATH)/$(EXE_NAME): cpp ui
 $(INSTALLER_DIR)/$(INSTALLER_NAME): $(EXE_PATH)/$(EXE_NAME)
 	$(QtIFW_FOLDER)/bin/binarycreator -c $(INSTALLER_DIR)/$(EXE_NAME)/config/config.xml -p $(INSTALLER_DIR)/$(EXE_NAME)/packages/ $(INSTALLER_DIR)/$(INSTALLER_NAME)
 
-test:
+test: cpp_gcov
 	pytest
 
+gcov_report: test
+	mkdir -p $(GCOV_DIR)
+	gcovr --html-details -o $(GCOV_DIR)/index.html --exclude $(MODEL_DIR)/s21_\.\*wrapper\.\*
+	open $(GCOV_DIR)/index.html
+
+lcov_report: test
+	mkdir -p $(GCOV_DIR)
+	lcov --capture --directory $(SRC_DIR) --exclude "$(CURDIR)/tests/*" --exclude "$(CURDIR)/model/*wrapper*" --output-file $(GCOV_DIR)/coverage.info --no-external
+	genhtml -o $(GCOV_DIR) $(GCOV_DIR)/coverage.info 
+	open $(GCOV_DIR)/index.html
+
 clean:
-	rm -rf dist build *.egg-info *.spec $(UI_PY) $(EXE_PATH)/$(EXE_NAME) $(INSTALLER_DIR)/$(INSTALLER_NAME)
+	rm -rf dist build *.egg-info *.spec $(UI_PY) $(EXE_PATH)/$(EXE_NAME) $(INSTALLER_DIR)/$(INSTALLER_NAME) $(GCOV_DIR)

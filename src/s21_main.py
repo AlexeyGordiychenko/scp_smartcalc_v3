@@ -7,7 +7,6 @@ import os
 
 
 if __name__ == "__main__":
-
     # Get the current path from the executable or the main .py file if running
     # manually
     if getattr(sys, 'frozen', False):

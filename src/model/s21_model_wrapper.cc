@@ -5,7 +5,12 @@
 
 namespace py = pybind11;
 
+#ifdef S21_SMARTCALC3_GCOV
+PYBIND11_MODULE(s21_model_wrapper_gcov, m) {
+#else
 PYBIND11_MODULE(s21_model_wrapper, m) {
+#endif
+
   py::class_<s21::Model>(m, "Model")
       .def(py::init<>())
       .def("parse_expression", &s21::Model::ParseExpression)
