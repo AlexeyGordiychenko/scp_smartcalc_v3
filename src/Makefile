@@ -34,7 +34,8 @@ exe: $(EXE_PATH)/$(EXE_NAME)
 run_exe: exe
 	$(EXE_PATH)/$(EXE_NAME)
 
-installer: $(INSTALLER_DIR)/$(INSTALLER_NAME)
+run_installer: $(INSTALLER_DIR)/$(INSTALLER_NAME)
+	$(INSTALLER_DIR)/$(INSTALLER_NAME)
 
 $(CPP_LIB): $(SRCS_MODEL)
 	export S21_SMARTCALC3_GCOV=0 && python $(MODEL_DIR)/s21_setup.py install
