@@ -1,13 +1,13 @@
 QtIFW_FOLDER = ~/Qt/QtIFW-4.7.0
-UI_PY = view/s21_view_ui.py
-EXE_NAME = s21_SmartCalc_v3
+UI_PY = view/scp_view_ui.py
+EXE_NAME = scp_SmartCalc_v3
 INSTALLER_NAME = $(EXE_NAME)_installer.run
 INSTALLER_DIR = installer
-EXE_PATH = $(INSTALLER_DIR)/$(EXE_NAME)/packages/com.elidacon.s21_smartcalc_v3/data/
+EXE_PATH = $(INSTALLER_DIR)/$(EXE_NAME)/packages/com.elidacon.scp_smartcalc_v3/data/
 
 MODEL_DIR=model
-SRCS_MODEL=$(wildcard $(MODEL_DIR)/s21_*.cc $(MODEL_DIR)/s21_*.h)
-CPP_LIB_GCOV = dist/s21_model_wrapper_gcov-0.1-py3.11-linux-x86_64.egg
+SRCS_MODEL=$(wildcard $(MODEL_DIR)/scp_*.cc $(MODEL_DIR)/scp_*.h)
+CPP_LIB_GCOV = dist/scp_model_wrapper_gcov-0.1-py3.11-linux-x86_64.egg
 CPP_LIB = $(subst _gcov,,$(CPP_LIB_GCOV))
 
 SRC_DIR=.
@@ -35,7 +35,7 @@ cpp_gcov: $(CPP_LIB_GCOV)
 ui: $(UI_PY)
 
 run: cpp ui
-	$(PYTHON) s21_main.py
+	$(PYTHON) scp_main.py
 
 exe: $(EXE_PATH)/$(EXE_NAME)
 
@@ -46,16 +46,16 @@ run_installer: $(INSTALLER_DIR)/$(INSTALLER_NAME)
 	$(INSTALLER_DIR)/$(INSTALLER_NAME)
 
 $(CPP_LIB): $(SRCS_MODEL)
-	export S21_SMARTCALC3_GCOV=0 && $(PYTHON) $(MODEL_DIR)/s21_setup.py install
+	export SCP_SMARTCALC3_GCOV=0 && $(PYTHON) $(MODEL_DIR)/scp_setup.py install
 
 $(CPP_LIB_GCOV): $(SRCS_MODEL)
-	export S21_SMARTCALC3_GCOV=1 && $(PYTHON) $(MODEL_DIR)/s21_setup.py install
+	export SCP_SMARTCALC3_GCOV=1 && $(PYTHON) $(MODEL_DIR)/scp_setup.py install
 
-$(UI_PY): view/s21_view.ui
-	$(PYSIDE6) view/s21_view.ui -o $(UI_PY)
+$(UI_PY): view/scp_view.ui
+	$(PYSIDE6) view/scp_view.ui -o $(UI_PY)
 
 $(EXE_PATH)/$(EXE_NAME): cpp ui
-	$(PYINSTALLER) --onefile -w --distpath $(EXE_PATH) --name $(EXE_NAME) s21_main.py 
+	$(PYINSTALLER) --onefile -w --distpath $(EXE_PATH) --name $(EXE_NAME) scp_main.py 
 
 $(INSTALLER_DIR)/$(INSTALLER_NAME): $(EXE_PATH)/$(EXE_NAME)
 	$(QtIFW_FOLDER)/bin/binarycreator -c $(INSTALLER_DIR)/$(EXE_NAME)/config/config.xml -p $(INSTALLER_DIR)/$(EXE_NAME)/packages/ $(INSTALLER_DIR)/$(INSTALLER_NAME)
@@ -65,7 +65,7 @@ test: cpp_gcov
 
 gcov_report: test
 	mkdir -p $(GCOV_DIR)
-	$(GCOVR) --html-details -o $(GCOV_DIR)/index.html --exclude $(MODEL_DIR)/s21_\.\*wrapper\.\*
+	$(GCOVR) --html-details -o $(GCOV_DIR)/index.html --exclude $(MODEL_DIR)/scp_\.\*wrapper\.\*
 	open $(GCOV_DIR)/index.html
 
 clean:

@@ -1,11 +1,11 @@
-#include "s21_model.h"
+#include "scp_model.h"
 
 #include <charconv>
 #include <string>
 
-#include "s21_credit.h"
+#include "scp_credit.h"
 
-void s21::Model::ParseExpression(const std::string& expression) {
+void scp::Model::ParseExpression(const std::string& expression) {
   ClearTheQueue();
   std::stack<Token> op_stack;
   TokenType prev_token_type = TokenType::kNone,
@@ -45,7 +45,7 @@ void s21::Model::ParseExpression(const std::string& expression) {
   MoveOperatorsFromStackToQueue(op_stack);
 }
 
-double s21::Model::Calculate(double x) {
+double scp::Model::Calculate(double x) {
   std::stack<double> eval_stack;
   for (auto token : rpn_queue_) {
     if (auto val = std::get_if<double>(&token)) {
@@ -80,7 +80,7 @@ double s21::Model::Calculate(double x) {
   return eval_stack.top();
 }
 
-s21::CreditResult s21::Model::CreditAnnuity(double principal, double term,
+scp::CreditResult scp::Model::CreditAnnuity(double principal, double term,
                                             double interestRate) {
   double r = interestRate / 12 / 100;
   int n = term * 12;
@@ -93,7 +93,7 @@ s21::CreditResult s21::Model::CreditAnnuity(double principal, double term,
   return {monthly, monthly, total - principal, total};
 };
 
-s21::CreditResult s21::Model::CreditDifferentiated(double principal,
+scp::CreditResult scp::Model::CreditDifferentiated(double principal,
                                                    double term,
                                                    double interestRate) {
   double total = 0;
@@ -110,21 +110,21 @@ s21::CreditResult s21::Model::CreditDifferentiated(double principal,
   return {monthly_start, monthly_end, total - principal, total};
 }
 
-bool s21::Model::IsBinaryOperator(TokenType type) {
+bool scp::Model::IsBinaryOperator(TokenType type) {
   return type >= TokenType::kDiv && type <= TokenType::kMod;
 }
 
-bool s21::Model::IsValue(TokenType type) {
+bool scp::Model::IsValue(TokenType type) {
   return type == TokenType::kNumber || type == TokenType::kX;
 }
 
-bool s21::Model::IsFunction(TokenType type) { return type >= TokenType::kSin; }
+bool scp::Model::IsFunction(TokenType type) { return type >= TokenType::kSin; }
 
-bool s21::Model::IsPlusMinus(TokenType type) {
+bool scp::Model::IsPlusMinus(TokenType type) {
   return type == TokenType::kPlus || type == TokenType::kMinus;
 }
 
-int s21::Model::GetPriority(TokenType type) {
+int scp::Model::GetPriority(TokenType type) {
   int res = 2;
   if (IsPlusMinus(type)) {
     res = 1;
@@ -137,7 +137,7 @@ int s21::Model::GetPriority(TokenType type) {
   return res;
 }
 
-s21::Model::TokenType s21::Model::GetTokenType(
+scp::Model::TokenType scp::Model::GetTokenType(
     std::string::const_iterator& it, std::string::const_iterator& end) {
   TokenType res = TokenType::kNone;
   if (std::isdigit(*it) || *it == '.') {
@@ -166,7 +166,7 @@ s21::Model::TokenType s21::Model::GetTokenType(
   return res;
 }
 
-bool s21::Model::IsValidToken(TokenType ctt, TokenType ptt) {
+bool scp::Model::IsValidToken(TokenType ctt, TokenType ptt) {
   if (ctt == TokenType::kNone) return false;
 
   bool res = false;
@@ -202,7 +202,7 @@ bool s21::Model::IsValidToken(TokenType ctt, TokenType ptt) {
   return res;
 }
 
-void s21::Model::HandleCloseParenthesis(std::stack<Token>& op_stack) {
+void scp::Model::HandleCloseParenthesis(std::stack<Token>& op_stack) {
   // While the token at the top of the stack is not a left parenthesis,
   // pop the token-operators from the stack into the output queue.
   while (!op_stack.empty()) {
@@ -237,7 +237,7 @@ void s21::Model::HandleCloseParenthesis(std::stack<Token>& op_stack) {
   }
 }
 
-std::size_t s21::Model::ParseNumber(const std::string& expression) {
+std::size_t scp::Model::ParseNumber(const std::string& expression) {
   double num;
   auto [p, ec] = std::from_chars(expression.data(),
                                  expression.data() + expression.size(), num);
@@ -250,7 +250,7 @@ std::size_t s21::Model::ParseNumber(const std::string& expression) {
   return p - expression.data();
 }
 
-void s21::Model::HandleBinaryOperator(std::stack<Token>& op_stack,
+void scp::Model::HandleBinaryOperator(std::stack<Token>& op_stack,
                                       TokenType ctt, TokenType ptt) {
   // If unary + or -, push 0 into the output queue
   if ((ptt == TokenType::kNone || ptt == TokenType::kOpenParenthesis) &&
@@ -277,7 +277,7 @@ void s21::Model::HandleBinaryOperator(std::stack<Token>& op_stack,
   op_stack.push(ctt);
 }
 
-void s21::Model::MoveOperatorsFromStackToQueue(std::stack<Token>& op_stack) {
+void scp::Model::MoveOperatorsFromStackToQueue(std::stack<Token>& op_stack) {
   // At the end of the parsing if there are operators left in the stack, move
   // them all to the queue
   while (!op_stack.empty()) {
@@ -293,22 +293,22 @@ void s21::Model::MoveOperatorsFromStackToQueue(std::stack<Token>& op_stack) {
   }
 }
 
-bool s21::Model::SkipSpaces(std::string::const_iterator& it,
+bool scp::Model::SkipSpaces(std::string::const_iterator& it,
                             std::string::const_iterator& end) {
   while (it != end && std::isspace(*it)) ++it;
   return it != end;
 }
 
-void s21::Model::ThrowInvalidExpression() {
+void scp::Model::ThrowInvalidExpression() {
   ClearTheQueue();
   throw std::invalid_argument(invalid_exp_message_);
 }
 
-void s21::Model::ClearTheQueue() {
+void scp::Model::ClearTheQueue() {
   if (!rpn_queue_.empty()) rpn_queue_ = {};
 }
 
-double s21::Model::CreditDifferentiatedMonthly(double principal, double term,
+double scp::Model::CreditDifferentiatedMonthly(double principal, double term,
                                                double interestRate, int m) {
   double i = interestRate / 12 / 100;
   int N = term * 12;

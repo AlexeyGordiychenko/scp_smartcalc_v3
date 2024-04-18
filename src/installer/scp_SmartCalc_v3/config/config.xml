@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>scp_SmartCalc_v3</Name>
+    <Version>3.0.0</Version>
+    <Title>scp_SmartCalc_v3 installer</Title>
+    <Publisher>Elidacon</Publisher>
+    <StartMenuDir>scp_SmartCalc_v3</StartMenuDir>
+    <TargetDir>@HomeDir@/scp_SmartCalc_v3</TargetDir>
+    <RunProgram>@HomeDir@/scp_SmartCalc_v3/scp_SmartCalc_v3</RunProgram>
+</Installer>

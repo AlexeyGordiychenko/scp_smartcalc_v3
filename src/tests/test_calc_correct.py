@@ -1,4 +1,4 @@
-from s21_model_wrapper_gcov import Model
+from scp_model_wrapper_gcov import Model
 import pytest
 
 

@@ -20,7 +20,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>S21 Calculator v3</string>
+   <string>SCP Calculator v3</string>
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(23, 28, 37);

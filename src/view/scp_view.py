@@ -2,8 +2,8 @@ import logging.handlers
 from PySide6.QtWidgets import QMainWindow, QMessageBox
 from PySide6.QtCore import Signal, Slot, QSettings, QLocale
 from PySide6.QtGui import QDoubleValidator, QColor
-from .s21_view_ui import Ui_View
-from .s21_view_graph import ViewGraph
+from .scp_view_ui import Ui_View
+from .scp_view_graph import ViewGraph
 from datetime import datetime
 import configparser
 import logging
@@ -24,7 +24,7 @@ class View(QMainWindow, Ui_View):
         self._exp_evaluated = False
         self._mode_switched = False
         self._plot_windows = []
-        self._settings = QSettings("s21_APP2", "SmartCalc_v3")
+        self._settings = QSettings("scp_APP2", "SmartCalc_v3")
         self._current_dir = current_dir
         self._logging_period = None
 

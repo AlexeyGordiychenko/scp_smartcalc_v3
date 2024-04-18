@@ -1,5 +1,5 @@
-#ifndef S21_SMARTCALC2_MODEL_H
-#define S21_SMARTCALC2_MODEL_H
+#ifndef SCP_SMARTCALC2_MODEL_H
+#define SCP_SMARTCALC2_MODEL_H
 
 #include <cmath>
 #include <functional>
@@ -8,9 +8,9 @@
 #include <unordered_map>
 #include <variant>
 
-#include "s21_credit.h"
+#include "scp_credit.h"
 
-namespace s21 {
+namespace scp {
 
 class Model {
  public:
@@ -146,5 +146,5 @@ class Model {
   double CreditDifferentiatedMonthly(double principal, double term,
                                      double interestRate, int m);
 };
-}  // namespace s21
-#endif  // S21_SMARTCALC2_MODEL_H
+}  // namespace scp
+#endif  // SCP_SMARTCALC2_MODEL_H

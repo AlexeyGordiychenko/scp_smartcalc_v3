@@ -3,10 +3,10 @@ import pybind11
 import os
 
 if __name__ == "__main__":
-    env_var = "S21_SMARTCALC3_GCOV"
+    env_var = "SCP_SMARTCALC3_GCOV"
     gcov_flag = os.getenv(env_var, '0') == '1'
     # Different flags for linux and windows
-    name = "s21_model_wrapper"
+    name = "scp_model_wrapper"
     if os.name == 'nt':
         cpp_args = ['/std:c++17']
         coverage_args = []
@@ -28,8 +28,8 @@ if __name__ == "__main__":
         ext_modules=[
             Extension(
                 name,
-                [os.path.join(current_path, "s21_model_wrapper.cc"),
-                 os.path.join(current_path, "s21_model.cc")],
+                [os.path.join(current_path, "scp_model_wrapper.cc"),
+                 os.path.join(current_path, "scp_model.cc")],
                 include_dirs=[pybind11.get_include()],
                 language="c++",
                 extra_compile_args=cpp_args,
