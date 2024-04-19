@@ -2,6 +2,38 @@
 
 Implementation of SmartCalc v3.0 in Python (desktop application).
 
+The app was developed in Python 3.11 using MVVM pattern. The model is a library in C++ from the previous version (SmartCalc v2.0) with a wrapper in Python. The view (frontend) was developed using Qt 6.5.2 (Python).
+
+The installer uses Qt Installer Framework. Was tested with Linux and Windows.
+
+<details>
+  <summary>App images</summary>
+
+![](img/calc1.png)
+![](img/calc2.png)
+![](img/calc3.png)
+![](img/calc4.png)
+![](img/calc5.png)
+
+</details>
+
+<details>
+  <summary>Installer images</summary>
+
+![](img/installer1.png)
+![](img/installer2.png)
+![](img/installer3.png)
+![](img/installer4.png)
+![](img/installer5.png)
+![](img/installer6.png)
+![](img/installer7.png)
+
+</details>
+
+## Score:
+
+The final score is 115% (max, without [bonus part3](#part-3-bonus-deposit-calculator)).
+
 ## Task
 
 ## Part 1. SmartCalc v3.0 implementation
